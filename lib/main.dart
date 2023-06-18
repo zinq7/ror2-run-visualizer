@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'dart:math';
 import 'stage_helper.dart';
 import 'util.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class RunVisualizer extends StatelessWidget {
         case "InventoryEvent":
           if (event["quantity"] == 0) break; // in case JSON is fucked
           if (event["transactionType"] == 5 && event["quantity"] > 0) break; // double logging voids whoops
-          (event["quantity"] > 0 ? gains : losses).add(event["item"]); // faster
+          (event["quantity"] > 0 ? gains : losses).add(event); // faster
           break;
 
         // boss event
@@ -113,12 +114,23 @@ class Stage extends StatelessWidget {
   void makeItemImageList(List<Widget> w, List<dynamic> items) {
     for (int i = 0; i < items.length; i++) {
       var item = items[i];
-      var itemName = item["englishName"];
+      var itemName = item["item"]["englishName"];
       w.add(
-        Image(
-          image: FileImage(File("./lib/assets/item_icons_english/$itemName.png")),
-          width: 64,
-          height: 64,
+        LayoutId(
+          id: item.hashCode,
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Image(
+                image: FileImage(File("./lib/assets/item_icons_english/$itemName.png")),
+                width: 64,
+                height: 64,
+              ),
+              Text(
+                timeFormat(item["timestamp"] - startTime).toString(),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -159,23 +171,40 @@ class Stage extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: gains,
-              ),
-              const Expanded(
-                flex: 0,
-                child: Divider(
-                  indent: 0,
-                  endIndent: 0,
-                  thickness: 5.0,
-                  color: Colors.black87,
-                  height: 5,
+              SizedBox(
+                height: 64,
+                child: CustomMultiChildLayout(
+                  delegate: PositionItems(
+                    stage: this,
+                    items: itemGains,
+                  ),
+                  children: gains,
                 ),
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: losses,
+              const SizedBox(
+                height: 15,
+                child: Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                    Divider(
+                      indent: 0,
+                      endIndent: 0,
+                      thickness: 5.0,
+                      color: Colors.black87,
+                      height: 5,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 64,
+                child: CustomMultiChildLayout(
+                  delegate: PositionItems(
+                    stage: this,
+                    items: itemLosses,
+                  ),
+                  children: losses,
+                ),
               ),
             ],
           ),
@@ -220,5 +249,39 @@ class StageDisplayer extends StatelessWidget {
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+}
+
+class PositionItems extends MultiChildLayoutDelegate {
+  List items;
+  Stage stage;
+  PositionItems({required this.stage, required this.items});
+
+  @override
+  void performLayout(Size size) {
+    for (final dynamic item in items) {
+      double time = item["timestamp"];
+      double completionPercent = (time - stage.startTime) / (stage.endTime - stage.startTime);
+      Offset position = Offset.zero;
+      layoutChild(
+        item.hashCode,
+        const BoxConstraints(
+          maxHeight: 64,
+          minHeight: 64,
+          maxWidth: 64,
+          minWidth: 64,
+        ),
+      );
+
+      positionChild(
+        item.hashCode,
+        position + Offset(completionPercent * size.width, 0),
+      );
+    }
+  }
+
+  @override
+  bool shouldRelayout(PositionItems oldItem) {
+    return false;
   }
 }
