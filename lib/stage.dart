@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'util.dart';
 import 'dart:io';
 import 'main.dart';
+import 'item_icon.dart';
 
 class Stage extends StatelessWidget {
   final List<dynamic> itemGains, itemLosses, bosses;
@@ -66,30 +69,32 @@ class Stage extends StatelessWidget {
       w.add(
         LayoutId(
           id: item.hashCode,
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              Container(
-                height: 64,
-                width: 64,
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(192, 119, 119, 119),
-                  border: Border.all(
-                    width: 0.05,
-                    color: Colors.white,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Image(
-                  image: FileImage(File("./lib/assets/item_icons_english/$itemName.png")),
-                  width: 64,
+          child: ItemIcon(
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                Container(
                   height: 64,
+                  width: 64,
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(192, 119, 119, 119),
+                    border: Border.all(
+                      width: 0.05,
+                      color: Colors.white,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Image(
+                    image: FileImage(File("./lib/assets/item_icons_english/$itemName.png")),
+                    width: 64,
+                    height: 64,
+                  ),
                 ),
-              ),
-              Text(
-                timeFormat(item["timestamp"] - startTime).toString(),
-              ),
-            ],
+                Text(
+                  timeFormat(item["timestamp"] - startTime).toString(),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -104,12 +109,19 @@ class Stage extends StatelessWidget {
     makeItemImageList(losses, itemLosses);
     makeBossImageList(boss, bosses); // not clear but ok
 
-    // minor fix if you lose no items
+    // minor fix if you lose no items, still add an empty box. needs a layout ID to be processed.
     if (losses.isEmpty) {
-      losses.add(const SizedBox(
-        width: 64,
-        height: 64,
-      ));
+      var item = {'timestamp': startTime, "eventType": "ballsEvent"};
+      itemLosses.add(item);
+      losses.add(
+        LayoutId(
+          id: item.hashCode,
+          child: const SizedBox(
+            width: 64,
+            height: 64,
+          ),
+        ),
+      );
     }
 
     var stageImage = Container(
@@ -176,7 +188,7 @@ class Stage extends StatelessWidget {
                       delegate: PositionItems(
                         stage: this,
                         items: bosses,
-                        offset: const Offset(0, -32),
+                        offset: const Offset(0, -26), // magic number alert, but it works :)
                       ),
                       children: boss,
                     ),

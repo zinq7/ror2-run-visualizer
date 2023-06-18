@@ -88,7 +88,7 @@ class RunVisualizer extends StatelessWidget {
             fontStyle: FontStyle.italic,
           ),
         ),
-        scaffoldBackgroundColor: const Color.fromARGB(75, 125, 127, 128),
+        scaffoldBackgroundColor: Color.fromARGB(255, 51, 51, 51), //const Color.fromARGB(75, 125, 127, 128),
       ),
       home: StageDisplayer(
         runTitle: "Sample Run - played by the amazing player 'zinq' in ${timeFormat(totalTime)}",
