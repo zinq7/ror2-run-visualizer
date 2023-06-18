@@ -8,7 +8,7 @@ import 'item_icon.dart';
 
 class Stage extends StatelessWidget {
   final List<dynamic> itemGains, itemLosses, bosses;
-  final String stageName;
+  final String stageName, nextStage;
   final double startTime, endTime;
   final int stageNum;
   final TextStyle textStyle;
@@ -27,6 +27,7 @@ class Stage extends StatelessWidget {
       fontStyle: FontStyle.normal,
       fontFamily: "Raleway",
     ),
+    this.nextStage = "",
   });
 
   void makeBossImageList(List boss, List bosses) {
@@ -111,6 +112,28 @@ class Stage extends StatelessWidget {
     }
   }
 
+  Widget getStage(String stageName, BorderRadius corners) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 4,
+          color: Colors.black,
+        ),
+        borderRadius: corners,
+      ),
+      child: ClipRRect(
+        borderRadius: corners * 0.75,
+        child: Image(
+          image: FileImage(
+            File("./lib/assets/stage_icons_english_dash/${stageName.replaceFirst(RegExp(r":"), " -")}.png"),
+          ),
+          width: 156,
+          height: 94,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> gains = [], losses = [], boss = [];
@@ -134,33 +157,34 @@ class Stage extends StatelessWidget {
       );
     }
 
-    var stageImage = Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 4,
-          color: Colors.black,
-        ),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(12),
-          bottomLeft: Radius.circular(12),
-        ),
-      ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(12),
-          bottomLeft: Radius.circular(12),
-        ),
-        child: Image(
-          image: FileImage(
-            File("./lib/assets/stage_icons_english_dash/${stageName.replaceFirst(RegExp(r":"), " -")}.png"),
-          ),
-          width: 156,
-          height: 94,
-        ),
+    String timeRep = "${timeFormat(endTime - startTime)}";
+
+    var stageImage = getStage(
+      stageName,
+      const BorderRadius.only(
+        topLeft: Radius.circular(12),
+        bottomLeft: Radius.circular(12),
       ),
     );
 
-    String timeRep = "${timeFormat(endTime - startTime)}  ";
+    var backStage = Stack(
+      alignment: Alignment.center,
+      children: [
+        getStage(
+          nextStage,
+          const BorderRadius.only(
+            bottomRight: Radius.circular(12),
+            topRight: Radius.circular(12),
+          ),
+        ),
+        Text(
+          "$timeRep",
+          textScaleFactor: 4.0,
+          textAlign: TextAlign.left,
+          textDirection: TextDirection.ltr,
+        ),
+      ],
+    );
 
     return Row(
       children: [
@@ -218,25 +242,7 @@ class Stage extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.black54,
-            border: Border.all(
-              color: Colors.black,
-              width: 4,
-            ),
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(12),
-              bottomRight: Radius.circular(12),
-            ),
-          ),
-          child: Text(
-            "Time: $timeRep",
-            textScaleFactor: 3.0,
-            textAlign: TextAlign.left,
-            textDirection: TextDirection.ltr,
-          ),
-        ),
+        backStage,
       ],
     );
   }

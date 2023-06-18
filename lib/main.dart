@@ -11,7 +11,7 @@ void main() {
 class RunVisualizer extends StatelessWidget {
   const RunVisualizer({super.key});
 
-  Stage analyzeStage(List stage) {
+  Stage analyzeStage(List stage, String nextStage) {
     List<dynamic> gains = [], losses = [], bosses = []; // yes
     String stageName = "none";
     int stageNum = -1;
@@ -32,6 +32,7 @@ class RunVisualizer extends StatelessWidget {
         case "StageStartEvent":
           stageName = event["stageNum"] == 6 ? "Commencement" : event["englishName"];
           stageNum = event["stageNum"];
+          if (stageNum == 5) nextStage = "Commencement";
           break;
 
         // inventory event
@@ -56,6 +57,7 @@ class RunVisualizer extends StatelessWidget {
       itemLosses: List<dynamic>.from(losses),
       stageName: stageName,
       bosses: bosses,
+      nextStage: nextStage,
     );
   }
 
@@ -71,7 +73,9 @@ class RunVisualizer extends StatelessWidget {
 
     // loop through stage
     for (int k = 0; k < stageJSONs.length; k++) {
-      stages.add(analyzeStage(stageJSONs[k]));
+      String nextStage = "";
+      if (k + 1 < stageJSONs.length) nextStage = stageJSONs[k + 1][0]["englishName"];
+      stages.add(analyzeStage(stageJSONs[k], nextStage));
       print('analyzing stage ${stageJSONs[k][0]["englishName"]}');
       totalTime += stages[k].endTime - stages[k].startTime;
     }
