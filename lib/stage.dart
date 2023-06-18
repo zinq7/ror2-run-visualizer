@@ -11,15 +11,23 @@ class Stage extends StatelessWidget {
   final String stageName;
   final double startTime, endTime;
   final int stageNum;
-  const Stage(
-      {super.key,
-      required this.itemGains,
-      required this.itemLosses,
-      required this.stageName,
-      required this.startTime,
-      required this.endTime,
-      required this.stageNum,
-      required this.bosses});
+  final TextStyle textStyle;
+  const Stage({
+    super.key,
+    required this.itemGains,
+    required this.itemLosses,
+    required this.stageName,
+    required this.startTime,
+    required this.endTime,
+    required this.stageNum,
+    required this.bosses,
+    this.textStyle = const TextStyle(
+      color: Colors.white,
+      fontSize: 18,
+      fontStyle: FontStyle.normal,
+      fontFamily: "Raleway",
+    ),
+  });
 
   void makeBossImageList(List boss, List bosses) {
     for (final dynamic event in bosses) {
@@ -54,6 +62,7 @@ class Stage extends StatelessWidget {
               ),
               Text(
                 timeFormat(event["timestamp"] - startTime).toString(),
+                style: textStyle,
               ),
             ],
           ),
@@ -77,7 +86,7 @@ class Stage extends StatelessWidget {
                   height: 64,
                   width: 64,
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(192, 119, 119, 119),
+                    color: const Color.fromARGB(136, 0, 0, 0), //Color.fromARGB(192, 119, 119, 119),
                     border: Border.all(
                       width: 0.05,
                       color: Colors.white,
@@ -92,6 +101,7 @@ class Stage extends StatelessWidget {
                 ),
                 Text(
                   timeFormat(item["timestamp"] - startTime).toString(),
+                  style: textStyle,
                 ),
               ],
             ),
@@ -210,7 +220,7 @@ class Stage extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white12,
+            color: Colors.black54,
             border: Border.all(
               color: Colors.black,
               width: 4,
