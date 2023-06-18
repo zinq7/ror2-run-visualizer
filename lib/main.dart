@@ -13,7 +13,7 @@ class RunVisualizer extends StatelessWidget {
   const RunVisualizer({super.key});
 
   Stage analyzeStage(List stage) {
-    List<dynamic> gains = List<dynamic>.empty(growable: true), losses = List<dynamic>.empty(growable: true); // yes
+    List<dynamic> gains = [], losses = [], bosses = []; // yes
     String stageName = "none";
     int stageNum = -1;
     double startTime, endTime, duration;
@@ -44,6 +44,7 @@ class RunVisualizer extends StatelessWidget {
 
         // boss event
         case "BossKillEvent":
+          bosses.add(event);
           break;
       }
     }
@@ -55,6 +56,7 @@ class RunVisualizer extends StatelessWidget {
       itemGains: List<dynamic>.from(gains),
       itemLosses: List<dynamic>.from(losses),
       stageName: stageName,
+      bosses: bosses,
     );
   }
 
@@ -98,7 +100,7 @@ class RunVisualizer extends StatelessWidget {
 }
 
 class Stage extends StatelessWidget {
-  final List<dynamic> itemGains, itemLosses;
+  final List<dynamic> itemGains, itemLosses, bosses;
   final String stageName;
   final double startTime, endTime;
   final int stageNum;
@@ -109,7 +111,8 @@ class Stage extends StatelessWidget {
       required this.stageName,
       required this.startTime,
       required this.endTime,
-      required this.stageNum});
+      required this.stageNum,
+      required this.bosses});
 
   void makeItemImageList(List<Widget> w, List<dynamic> items) {
     for (int i = 0; i < items.length; i++) {
@@ -138,10 +141,36 @@ class Stage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> gains = List<Widget>.empty(growable: true), losses = List<Widget>.empty(growable: true);
+    List<Widget> gains = [], losses = [], boss = [];
 
     makeItemImageList(gains, itemGains);
     makeItemImageList(losses, itemLosses);
+
+    for (final dynamic event in bosses) {
+      String bossName = event["boss"].replaceAll("?", "w");
+      List eliteNames = ["Overloading", "Blazing", "Mending", "Glacial"];
+      for (String x in eliteNames) {
+        bossName = bossName.replaceAll("$x ", "");
+      }
+      boss.add(
+        LayoutId(
+          id: event.hashCode,
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Image(
+                image: FileImage(File("./lib/assets/body_portraits_english_x/$bossName.png")),
+                width: 64,
+                height: 64,
+              ),
+              Text(
+                timeFormat(event["timestamp"] - startTime).toString(),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     // minor fix if you lose no items
     if (losses.isEmpty) {
@@ -181,17 +210,25 @@ class Stage extends StatelessWidget {
                   children: gains,
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 15,
                 child: Stack(
                   alignment: Alignment.centerLeft,
                   children: [
-                    Divider(
+                    const Divider(
                       indent: 0,
                       endIndent: 0,
                       thickness: 5.0,
                       color: Colors.black87,
                       height: 5,
+                    ),
+                    CustomMultiChildLayout(
+                      delegate: PositionItems(
+                        stage: this,
+                        items: bosses,
+                        offset: const Offset(0, -32),
+                      ),
+                      children: boss,
                     ),
                   ],
                 ),
@@ -255,14 +292,14 @@ class StageDisplayer extends StatelessWidget {
 class PositionItems extends MultiChildLayoutDelegate {
   List items;
   Stage stage;
-  PositionItems({required this.stage, required this.items});
+  Offset offset;
+  PositionItems({required this.stage, required this.items, this.offset = Offset.zero});
 
   @override
   void performLayout(Size size) {
     for (final dynamic item in items) {
       double time = item["timestamp"];
       double completionPercent = (time - stage.startTime) / (stage.endTime - stage.startTime);
-      Offset position = Offset.zero;
       layoutChild(
         item.hashCode,
         const BoxConstraints(
@@ -275,7 +312,7 @@ class PositionItems extends MultiChildLayoutDelegate {
 
       positionChild(
         item.hashCode,
-        position + Offset(completionPercent * size.width, 0),
+        offset + Offset(completionPercent * size.width, 0),
       );
     }
   }
