@@ -1,8 +1,7 @@
 import 'dart:io';
-import 'dart:convert';
-import 'dart:math';
 import 'stage_helper.dart';
 import 'util.dart';
+import 'stage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -84,175 +83,17 @@ class RunVisualizer extends StatelessWidget {
         useMaterial3: true,
         textTheme: const TextTheme(
           bodyMedium: TextStyle(
-            color: Colors.white,
+            color: Color.fromARGB(255, 185, 185, 185),
             fontFamily: "Comic Sans",
             fontStyle: FontStyle.italic,
           ),
         ),
-        scaffoldBackgroundColor: Colors.grey[500],
+        scaffoldBackgroundColor: const Color.fromARGB(75, 125, 127, 128),
       ),
       home: StageDisplayer(
         runTitle: "Sample Run - played by the amazing player 'zinq' in ${timeFormat(totalTime)}",
         stages: stages,
       ),
-    );
-  }
-}
-
-class Stage extends StatelessWidget {
-  final List<dynamic> itemGains, itemLosses, bosses;
-  final String stageName;
-  final double startTime, endTime;
-  final int stageNum;
-  const Stage(
-      {super.key,
-      required this.itemGains,
-      required this.itemLosses,
-      required this.stageName,
-      required this.startTime,
-      required this.endTime,
-      required this.stageNum,
-      required this.bosses});
-
-  void makeItemImageList(List<Widget> w, List<dynamic> items) {
-    for (int i = 0; i < items.length; i++) {
-      var item = items[i];
-      var itemName = item["item"]["englishName"];
-      w.add(
-        LayoutId(
-          id: item.hashCode,
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              Image(
-                image: FileImage(File("./lib/assets/item_icons_english/$itemName.png")),
-                width: 64,
-                height: 64,
-              ),
-              Text(
-                timeFormat(item["timestamp"] - startTime).toString(),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> gains = [], losses = [], boss = [];
-
-    makeItemImageList(gains, itemGains);
-    makeItemImageList(losses, itemLosses);
-
-    for (final dynamic event in bosses) {
-      String bossName = event["boss"].replaceAll("?", "w");
-      List eliteNames = ["Overloading", "Blazing", "Mending", "Glacial"];
-      for (String x in eliteNames) {
-        bossName = bossName.replaceAll("$x ", "");
-      }
-      boss.add(
-        LayoutId(
-          id: event.hashCode,
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              Image(
-                image: FileImage(File("./lib/assets/body_portraits_english_x/$bossName.png")),
-                width: 64,
-                height: 64,
-              ),
-              Text(
-                timeFormat(event["timestamp"] - startTime).toString(),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    // minor fix if you lose no items
-    if (losses.isEmpty) {
-      losses.add(const SizedBox(
-        width: 64,
-        height: 64,
-      ));
-    }
-
-    Image stageImage = Image(
-      image: FileImage(
-        File("./lib/assets/stage_icons_english_dash/${stageName.replaceFirst(RegExp(r":"), " -")}.png"),
-      ),
-      width: 156,
-      height: 156,
-    );
-
-    String timeRep = "${timeFormat(endTime - startTime)}  ";
-
-    return Row(
-      children: [
-        Text(
-          "#$stageNum: ",
-          textScaleFactor: 3.0,
-        ),
-        stageImage,
-        Expanded(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 64,
-                child: CustomMultiChildLayout(
-                  delegate: PositionItems(
-                    stage: this,
-                    items: itemGains,
-                  ),
-                  children: gains,
-                ),
-              ),
-              SizedBox(
-                height: 15,
-                child: Stack(
-                  alignment: Alignment.centerLeft,
-                  children: [
-                    const Divider(
-                      indent: 0,
-                      endIndent: 0,
-                      thickness: 5.0,
-                      color: Colors.black87,
-                      height: 5,
-                    ),
-                    CustomMultiChildLayout(
-                      delegate: PositionItems(
-                        stage: this,
-                        items: bosses,
-                        offset: const Offset(0, -32),
-                      ),
-                      children: boss,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 64,
-                child: CustomMultiChildLayout(
-                  delegate: PositionItems(
-                    stage: this,
-                    items: itemLosses,
-                  ),
-                  children: losses,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Text(
-          "Time: $timeRep",
-          textScaleFactor: 3.0,
-          textAlign: TextAlign.left,
-          textDirection: TextDirection.ltr,
-        ),
-      ],
     );
   }
 }
@@ -312,7 +153,7 @@ class PositionItems extends MultiChildLayoutDelegate {
 
       positionChild(
         item.hashCode,
-        offset + Offset(completionPercent * size.width, 0),
+        offset + Offset(completionPercent * (size.width - 32), 0),
       );
     }
   }
