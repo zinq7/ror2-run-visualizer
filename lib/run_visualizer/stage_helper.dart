@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'stage.dart';
 
 /// Parse the next stage from a JSON and return [the stage, the rest];
 List getStage(List json) {
@@ -31,4 +32,54 @@ List getStageEvents(String jsonString) {
   }
 
   return stageEvents;
+}
+
+Stage analyzeStage(List stage, String nextStage) {
+  List<dynamic> gains = [], losses = [], bosses = []; // yes
+  String stageName = "none";
+  int stageNum = -1;
+  double startTime, endTime, duration;
+
+  // first event stageStart, last stageSplit
+  startTime = stage[0]["timestamp"];
+  endTime = stage[stage.length - 1]["timestamp"];
+  duration = endTime - startTime;
+  print("start: $startTime, end: $endTime, length: $duration");
+
+  // items in stages
+  for (int i = 0; i < stage.length; i++) {
+    var event = stage[i]; // get ev
+
+    switch (event["eventType"]) {
+      // stage start
+      case "StageStartEvent":
+        stageName = event["stageNum"] == 6 ? "Commencement" : event["englishName"];
+        stageNum = event["stageNum"];
+        if (stageNum == 5) nextStage = "Commencement";
+        break;
+
+      // inventory event
+      case "InventoryEvent":
+        if (event["quantity"] == 0) break; // in case JSON is fucked
+        if (event["transactionType"] == 5 && event["quantity"] > 0) break; // double logging voids whoops
+        (event["quantity"] > 0 ? gains : losses).add(event); // faster
+        break;
+
+      // boss event
+      case "BossKillEvent":
+        bosses.add(event);
+        break;
+    }
+  }
+
+  return Stage(
+    stageNum: stageNum,
+    startTime: startTime,
+    endTime: endTime,
+    itemGains: List<dynamic>.from(gains),
+    itemLosses: List<dynamic>.from(losses),
+    stageName: stageName,
+    bosses: bosses,
+    nextStage: nextStage,
+  );
 }
