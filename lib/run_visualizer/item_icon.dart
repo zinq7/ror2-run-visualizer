@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// An Icon of an Item, currently just a fancy InkWell.
 class ItemIcon extends StatefulWidget {
   final Widget child;
 
@@ -9,15 +10,11 @@ class ItemIcon extends StatefulWidget {
 }
 
 class _ItemIconState extends State<ItemIcon> {
-  bool _isHover = false;
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onHover: (val) {
-        setState(() {
-          _isHover = val;
-        });
+        setState(() {});
       },
       onTap: () {},
       child: widget.child,

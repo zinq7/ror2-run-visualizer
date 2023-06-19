@@ -1,11 +1,13 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'util.dart';
+import '../util.dart';
 import 'dart:io';
-import 'main.dart';
+// import 'run_visualizer.dart';
 import 'item_icon.dart';
 
+/// Stage is a horizontal widget that lists all info of a stage:
+/// The stage number and image;
+/// A timeline of item gains + losses, and boss + tps.
+/// The next stage and split time
 class Stage extends StatelessWidget {
   final List<dynamic> itemGains, itemLosses, bosses;
   final String stageName, nextStage;
@@ -30,6 +32,7 @@ class Stage extends StatelessWidget {
     this.nextStage = "",
   });
 
+  /// Add a bunch of Widgets into [boss] based on the ones in [bosses]
   void makeBossImageList(List boss, List bosses) {
     for (final dynamic event in bosses) {
       String bossName = event["boss"].replaceAll("?", "w");
@@ -37,6 +40,8 @@ class Stage extends StatelessWidget {
       for (String x in eliteNames) {
         bossName = bossName.replaceAll("$x ", "");
       }
+
+      // The component: confusing
       boss.add(
         LayoutId(
           id: event.hashCode,
@@ -57,7 +62,7 @@ class Stage extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image(
-                    image: FileImage(File("./lib/assets/body_portraits_english_x/$bossName.png")),
+                    image: AssetImage("lib/assets/body_portraits_english_x/$bossName.png"),
                   ),
                 ),
               ),
@@ -95,7 +100,7 @@ class Stage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Image(
-                    image: FileImage(File("./lib/assets/item_icons_english/$itemName.png")),
+                    image: AssetImage("lib/assets/item_icons_english/$itemName.png"),
                     width: 64,
                     height: 64,
                   ),
@@ -124,9 +129,7 @@ class Stage extends StatelessWidget {
       child: ClipRRect(
         borderRadius: corners * 0.75,
         child: Image(
-          image: FileImage(
-            File("./lib/assets/stage_icons_english_dash/${stageName.replaceFirst(RegExp(r":"), " -")}.png"),
-          ),
+          image: AssetImage("lib/assets/stage_icons_english_dash/${stageName.replaceFirst(RegExp(r":"), " -")}.png"),
           width: 156,
           height: 94,
         ),
@@ -157,7 +160,7 @@ class Stage extends StatelessWidget {
       );
     }
 
-    String timeRep = "${timeFormat(endTime - startTime)}";
+    String timeRep = timeFormat(endTime - startTime);
 
     var stageImage = getStage(
       stageName,
@@ -178,7 +181,7 @@ class Stage extends StatelessWidget {
           ),
         ),
         Text(
-          "$timeRep",
+          timeRep,
           textScaleFactor: 4.0,
           textAlign: TextAlign.left,
           textDirection: TextDirection.ltr,
@@ -245,5 +248,41 @@ class Stage extends StatelessWidget {
         backStage,
       ],
     );
+  }
+}
+
+/// MultiChildLayoutDelegate child that positions items in a timeline;
+/// Requires a list of items and the parent stage
+class PositionItems extends MultiChildLayoutDelegate {
+  List items;
+  Stage stage;
+  Offset offset;
+  PositionItems({required this.stage, required this.items, this.offset = Offset.zero});
+
+  @override
+  void performLayout(Size size) {
+    for (final dynamic item in items) {
+      double time = item["timestamp"];
+      double completionPercent = (time - stage.startTime) / (stage.endTime - stage.startTime);
+      layoutChild(
+        item.hashCode,
+        const BoxConstraints(
+          maxHeight: 64,
+          minHeight: 64,
+          maxWidth: 64,
+          minWidth: 64,
+        ),
+      );
+
+      positionChild(
+        item.hashCode,
+        offset + Offset(completionPercent * (size.width - 64), 0), // inherent 64 offset
+      );
+    }
+  }
+
+  @override
+  bool shouldRelayout(PositionItems oldDelegate) {
+    return false;
   }
 }

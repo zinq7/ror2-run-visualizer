@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+/// Parse the next stage from a JSON and return [the stage, the rest];
 List getStage(List json) {
   List lst = json;
   int start = 0, end = lst.indexWhere((element) => element["eventType"] == "StageEndEvent");
@@ -9,6 +10,7 @@ List getStage(List json) {
   return [lst.sublist(start, end + 1), lst.sublist(end + 1)]; // separate on end
 }
 
+/// Get all the stage events, and return them as a list of JSON arrays.
 List getStageEvents(String jsonString) {
   // read run
   var json = jsonDecode(jsonString);
