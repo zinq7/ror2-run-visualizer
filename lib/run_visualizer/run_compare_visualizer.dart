@@ -1,11 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/diagnostics.dart';
 import 'run_visualizer.dart';
 import 'stage_helper.dart';
 import 'stage.dart';
-import '../util.dart';
 
 class RunComparer extends StatefulWidget {
   final List<String> runs;
