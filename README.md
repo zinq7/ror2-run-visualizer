@@ -1,16 +1,10 @@
-# test_app
+# RoR Run Visualizer
 
-A new Flutter project.
+A data visualizer for events within a Risk of Rain 2 run. Using the flutter app framework, so don't blame me if it looks bad.
 
-## Getting Started
+# What's it do?
 
-This project is a starting point for a Flutter application.
+## Full item analysis
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Taking a json representation of the run (`.run.json`), it creates a nice little bar that shows all the items collected, deaths, and bosses on a timeline. Only supports the analysis of a singe run.
+![look at this pls](https://github.com/zinq7/ror2-run-visualizer/blob/main/lib/assets/screenshots/static_timeline_v1.png?raw=true)
