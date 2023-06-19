@@ -24,8 +24,12 @@ class FilePick extends StatelessWidget {
                   List<String> jsons = [];
 
                   for (var file in response.files) {
-                    String json = const Utf8Decoder().convert(lst.toList());
-                    jsons.add(json);
+                    lst = file.bytes;
+                    // null check
+                    if (lst != null) {
+                      String json = const Utf8Decoder().convert(lst.toList());
+                      jsons.add(json);
+                    }
                   }
                   runApp(RunComparer(runs: jsons));
                 } else {
