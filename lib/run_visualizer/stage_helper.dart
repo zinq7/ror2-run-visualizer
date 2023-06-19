@@ -12,10 +12,7 @@ List getStage(List json) {
 }
 
 /// Get all the stage events, and return them as a list of JSON arrays.
-List getStageEvents(String jsonString) {
-  // read run
-  var json = jsonDecode(jsonString);
-
+List getStageEvents(Map json) {
   // get events (to start)
   List events = getStage(json["runEvents"]);
   List stageEvents = [];
@@ -34,7 +31,13 @@ List getStageEvents(String jsonString) {
   return stageEvents;
 }
 
-Stage analyzeStage(List stage, String nextStage) {
+Stage analyzeStage(
+  List stage,
+  String nextStage, {
+  SideInfo leftItem = SideInfo.numbers,
+  String runner = "none",
+}) {
+  // DECLARE VARIABLES FOR ANALYSIS
   List<dynamic> gains = [], losses = [], bosses = []; // yes
   String stageName = "none";
   int stageNum = -1;
@@ -81,5 +84,12 @@ Stage analyzeStage(List stage, String nextStage) {
     stageName: stageName,
     bosses: bosses,
     nextStage: nextStage,
+    sideInfo: leftItem,
+    runner: runner,
   );
+}
+
+enum SideInfo {
+  numbers,
+  profilePics,
 }

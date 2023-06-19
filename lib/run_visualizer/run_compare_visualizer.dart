@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'run_visualizer.dart';
+import 'displayer_widget.dart';
 import 'stage_helper.dart';
 import 'stage.dart';
+import 'dart:convert';
 
 class RunComparer extends StatefulWidget {
   final List<String> runs;
@@ -30,13 +31,19 @@ class RunComparerState extends State<RunComparer> {
 
     for (var json in widget.runs) {
       // get stage events
-      List stageJSONs = getStageEvents(json);
+      Map runJSON = jsonDecode(json);
+      List stageJSONs = getStageEvents(runJSON);
       playerLengths.add(stageJSONs.length);
 
       // loop through stage
       String nextStage = "";
       if (_stageNum + 1 < stageJSONs.length) nextStage = stageJSONs[_stageNum + 1][0]["englishName"];
-      stages.add(analyzeStage(stageJSONs[_stageNum], nextStage));
+      stages.add(analyzeStage(
+        stageJSONs[_stageNum],
+        nextStage,
+        leftItem: SideInfo.profilePics,
+        runner: runJSON["runner"],
+      ));
     }
 
     return MaterialApp(

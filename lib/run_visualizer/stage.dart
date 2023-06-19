@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../util.dart';
-// import 'run_visualizer.dart';
+import 'stage_helper.dart';
 import 'item_icon.dart';
+import 'dart:convert';
 
 /// Stage is a horizontal widget that lists all info of a stage:
 /// The stage number and image;
@@ -9,10 +10,11 @@ import 'item_icon.dart';
 /// The next stage and split time
 class Stage extends StatelessWidget {
   final List<dynamic> itemGains, itemLosses, bosses;
-  final String stageName, nextStage;
+  final String stageName, nextStage, runner;
   final double startTime, endTime;
   final int stageNum;
   final TextStyle textStyle;
+  final SideInfo sideInfo;
   const Stage({
     super.key,
     required this.itemGains,
@@ -29,6 +31,8 @@ class Stage extends StatelessWidget {
       fontFamily: "Raleway",
     ),
     this.nextStage = "",
+    this.sideInfo = SideInfo.numbers,
+    this.runner = "none",
   });
 
   /// Add a bunch of Widgets into [boss] based on the ones in [bosses]
@@ -190,10 +194,32 @@ class Stage extends StatelessWidget {
 
     return Row(
       children: [
-        Text(
-          "#$stageNum: ",
-          textScaleFactor: 3.0,
-        ),
+        (() {
+          if (sideInfo == SideInfo.numbers) {
+            return Text(
+              "#$stageNum: ",
+              textScaleFactor: 3.0,
+            );
+          } else if (sideInfo == SideInfo.profilePics) {
+            String profPic = MAP[runner]!;
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.black38,
+                border: Border.all(
+                  color: Colors.black,
+                  width: 5,
+                ),
+              ),
+              child: Image.network(
+                profPic,
+                width: 70,
+                height: 70,
+              ),
+            );
+          } else {
+            return const Text("f");
+          }
+        }()),
         stageImage,
         Expanded(
           child: Column(
@@ -285,3 +311,11 @@ class PositionItems extends MultiChildLayoutDelegate {
     return false;
   }
 }
+
+const MAP = <String, String>{
+  "Cabbage123": "https://yt3.googleusercontent.com/_H-mAz3ZtQ3HQ08ymGa7S4bHVcso-U0NiixDU3D2zFx_2hJiGzOSzUr6OHrs1LRR9J7diYloVA=s176-c-k-c0x00ffffff-no-rj",
+  "Nuxlar": "https://static-cdn.jtvnw.net/jtv_user_pictures/0565f80a-60e4-4cb3-a255-b69b3c30d501-profile_image-70x70.png",
+  "zinqio": "https://static-cdn.jtvnw.net/jtv_user_pictures/9d1e7994-2ebf-4617-a4f6-8263984b4b79-profile_image-70x70.png",
+  "ICap_I": "https://www.ikea.com/ca/en/images/products/knoeckla-step-trash-can-dark-gray__1029080_pe835654_s5.jpg",
+  "no_pick": "https://1.bp.blogspot.com/-iCnFX7eWVjs/XR9NQutHXcI/AAAAAAAAJ9k/ISWH3UXgJF8QJdsV6P9wh3agzOwOF_aYgCLcBGAs/s1600/cat-1285634_1920.png"
+};
