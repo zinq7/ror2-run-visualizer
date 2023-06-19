@@ -14,7 +14,7 @@ class FilePick extends StatelessWidget {
         textDirection: TextDirection.ltr,
         child: InkWell(
           onTap: () {
-            var res = FilePicker.platform.pickFiles(withData: true, type: FileType.custom, allowedExtensions: [".run.json"]);
+            var res = FilePicker.platform.pickFiles(withData: true, type: FileType.custom, allowedExtensions: ["run.json"]);
             res.then((response) {
               var lst = response?.files[0].bytes;
               if (lst != null) {

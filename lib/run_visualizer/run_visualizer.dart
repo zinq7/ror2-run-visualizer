@@ -141,9 +141,6 @@ class StageDisplayer extends StatelessWidget {
               children: stages,
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {},
-          ),
         ),
       ], // This trailing comma makes auto-formatting nicer for build methods.
     );
