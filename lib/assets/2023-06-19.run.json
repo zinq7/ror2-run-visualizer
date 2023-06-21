@@ -1,0 +1,335 @@
+{
+    "runEvents": [
+        {
+            "enemies": null,
+            "englishName": "Titanic Plains",
+            "stageNum": 1,
+            "eventType": "StageStartEvent",
+            "timestamp": 0.5333335,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        {
+            "transactionType": 0,
+            "item": {
+                "englishName": "Tougher Times",
+                "tier": 0
+            },
+            "quantity": 1,
+            "eventType": "InventoryEvent",
+            "timestamp": 36.01629,
+            "x": 184.851044,
+            "y": -119.787292,
+            "z": -264.023773
+        },
+        {
+            "chargeType": 1,
+            "eventType": "ChargeStartEvent",
+            "timestamp": 51.2327232,
+            "x": -99.92381,
+            "y": -145.63768,
+            "z": -214.093521
+        },
+        {
+            "killer": "WispBody",
+            "eventType": "DeathEvent",
+            "timestamp": 77.4520645,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        {
+            "transactionType": 0,
+            "item": {
+                "englishName": "Lazarus Wings",
+                "tier": 5
+            },
+            "quantity": 1,
+            "eventType": "InventoryEvent",
+            "timestamp": 77.4520645,
+            "x": -91.71983,
+            "y": -143.458679,
+            "z": -232.232559
+        },
+        {
+            "boss": "Wandering Vagrant",
+            "eventType": "BossKillEvent",
+            "timestamp": 80.16931,
+            "x": -99.92381,
+            "y": -145.63768,
+            "z": -214.093521
+        },
+        {
+            "transactionType": 0,
+            "item": {
+                "englishName": "Shipping Request Form",
+                "tier": 1
+            },
+            "quantity": 1,
+            "eventType": "InventoryEvent",
+            "timestamp": 82.95324,
+            "x": -90.24685,
+            "y": -142.798279,
+            "z": -221.628723
+        },
+        {
+            "chargeType": 1,
+            "eventType": "ChargeEndEvent",
+            "timestamp": 149.340988,
+            "x": -99.92381,
+            "y": -145.63768,
+            "z": -214.093521
+        },
+        {
+            "englishName": "Titanic Plains",
+            "stageNum": 1,
+            "eventType": "StageEndEvent",
+            "timestamp": 159.288559,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        {
+            "enemies": null,
+            "englishName": "Abandoned Aqueduct",
+            "stageNum": 2,
+            "eventType": "StageStartEvent",
+            "timestamp": 159.288559,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        {
+            "englishName": "Abandoned Aqueduct",
+            "stageNum": 2,
+            "eventType": "StageEndEvent",
+            "timestamp": 164.470627,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        {
+            "enemies": null,
+            "englishName": "Sulfur Pools",
+            "stageNum": 3,
+            "eventType": "StageStartEvent",
+            "timestamp": 164.470627,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        {
+            "englishName": "Sulfur Pools",
+            "stageNum": 3,
+            "eventType": "StageEndEvent",
+            "timestamp": 167.6032,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        {
+            "enemies": null,
+            "englishName": "Siren's Call",
+            "stageNum": 4,
+            "eventType": "StageStartEvent",
+            "timestamp": 167.6032,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        {
+            "englishName": "Siren's Call",
+            "stageNum": 4,
+            "eventType": "StageEndEvent",
+            "timestamp": 179.4503,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        {
+            "enemies": null,
+            "englishName": "Sky Meadow",
+            "stageNum": 5,
+            "eventType": "StageStartEvent",
+            "timestamp": 179.4503,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        {
+            "englishName": "Sky Meadow",
+            "stageNum": 5,
+            "eventType": "StageEndEvent",
+            "timestamp": 184.365768,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        {
+            "enemies": null,
+            "englishName": "Siphoned Forest",
+            "stageNum": 6,
+            "eventType": "StageStartEvent",
+            "timestamp": 184.365768,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        {
+            "transactionType": 0,
+            "item": {
+                "englishName": "ITEM_BOOSTDAMAGE_NAME",
+                "tier": 5
+            },
+            "quantity": 1,
+            "eventType": "InventoryEvent",
+            "timestamp": 193.346909,
+            "x": 1108.171,
+            "y": -281.2511,
+            "z": 1183.41052
+        },
+        {
+            "transactionType": 0,
+            "item": {
+                "englishName": "Purity",
+                "tier": 3
+            },
+            "quantity": 1,
+            "eventType": "InventoryEvent",
+            "timestamp": 199.4121,
+            "x": 1108.17163,
+            "y": -281.25235,
+            "z": 1183.41125
+        },
+        {
+            "transactionType": 0,
+            "item": {
+                "englishName": "Backup Magazine",
+                "tier": 0
+            },
+            "quantity": 1,
+            "eventType": "InventoryEvent",
+            "timestamp": 213.675278,
+            "x": 536.3175,
+            "y": -155.372421,
+            "z": 624.5432
+        },
+        {
+            "transactionType": 0,
+            "item": {
+                "englishName": "Backup Magazine",
+                "tier": 0
+            },
+            "quantity": 1,
+            "eventType": "InventoryEvent",
+            "timestamp": 217.0078,
+            "x": 534.140564,
+            "y": -155.372421,
+            "z": 618.6406
+        },
+        {
+            "boss": "Mithrix",
+            "eventType": "BossKillEvent",
+            "timestamp": 255.298447,
+            "x": 1.79275513,
+            "y": 498.3,
+            "z": 0.21270752
+        },
+        {
+            "boss": "Lunar Chimera",
+            "eventType": "BossKillEvent",
+            "timestamp": 269.3117,
+            "x": 1.79275513,
+            "y": 498.3,
+            "z": 0.21270752
+        },
+        {
+            "boss": "Mithrix",
+            "eventType": "BossKillEvent",
+            "timestamp": 275.276917,
+            "x": 1.79275513,
+            "y": 498.3,
+            "z": 0.21270752
+        },
+        {
+            "mithrixHealth": 4340.0,
+            "eventType": "PizzaEnterEvent",
+            "timestamp": 276.343323,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        {
+            "mithrixHealth": 4340.0,
+            "eventType": "PizzaExitEvent",
+            "timestamp": 285.107849,
+            "x": -88.4848557,
+            "y": 495.6099,
+            "z": -0.332527757
+        },
+        {
+            "boss": "Mithrix",
+            "eventType": "BossKillEvent",
+            "timestamp": 285.7577,
+            "x": 1.79275513,
+            "y": 498.3,
+            "z": 0.21270752
+        },
+        {
+            "transactionType": 0,
+            "item": {
+                "englishName": "Tougher Times",
+                "tier": 0
+            },
+            "quantity": 1,
+            "eventType": "InventoryEvent",
+            "timestamp": 285.791016,
+            "x": -89.66938,
+            "y": 493.54126,
+            "z": 6.27665663
+        },
+        {
+            "transactionType": 0,
+            "item": {
+                "englishName": "Shipping Request Form",
+                "tier": 1
+            },
+            "quantity": 1,
+            "eventType": "InventoryEvent",
+            "timestamp": 285.791016,
+            "x": -89.66938,
+            "y": 493.54126,
+            "z": 6.27665663
+        },
+        {
+            "transactionType": 0,
+            "item": {
+                "englishName": "Purity",
+                "tier": 3
+            },
+            "quantity": 1,
+            "eventType": "InventoryEvent",
+            "timestamp": 285.791016,
+            "x": -89.66938,
+            "y": 493.54126,
+            "z": 6.27665663
+        },
+        {
+            "transactionType": 0,
+            "item": {
+                "englishName": "Backup Magazine",
+                "tier": 0
+            },
+            "quantity": 1,
+            "eventType": "InventoryEvent",
+            "timestamp": 285.791016,
+            "x": -89.66938,
+            "y": 493.54126,
+            "z": 6.27665663
+        }
+    ],
+    "artifacts": [],
+    "difficulty": "Eclipse8",
+    "runner": "zinqio"
+}
