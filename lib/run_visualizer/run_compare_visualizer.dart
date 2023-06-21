@@ -68,8 +68,10 @@ class RunComparerState extends State<RunComparer> {
             onPressed: () {
               changeStage(_stageNum + 1);
             },
-            child: const Text(
-              "Next Stage",
+            child: Image.network(
+              "https://cdn-icons-png.flaticon.com/512/189/189253.png",
+              width: 80,
+              height: 80,
             ),
           )),
     );

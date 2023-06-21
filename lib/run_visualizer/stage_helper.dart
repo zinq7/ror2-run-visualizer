@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'stage.dart';
 
 /// Parse the next stage from a JSON and return [the stage, the rest];
@@ -6,7 +5,7 @@ List getStage(List json) {
   List lst = json;
   int start = 0, end = lst.indexWhere((element) => element["eventType"] == "StageEndEvent");
 
-  if (end == -1) return [json, []]; // no stageEnd is last stage
+  if (end == -1) return [json, null]; // no stageEnd is last stage
 
   return [lst.sublist(start, end + 1), lst.sublist(end + 1)]; // separate on end
 }
@@ -23,11 +22,13 @@ List getStageEvents(Map json) {
     stageEvents.add(events[0]); // events[0] is the stage
 
     events = getStage(events[1]); // events[1] is the rest
+    if (events[1] == null) break;
     stage++;
 
     if (stage > 6) break; // unlikely, but ignore loops
   }
 
+  if (events[0] != null) stageEvents.add(events[0]);
   return stageEvents;
 }
 

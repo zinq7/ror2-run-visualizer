@@ -59,6 +59,7 @@ flutter:
     - lib/assets/item_icons_english/
     - lib/assets/misc/
     - lib/assets/stage_icons_english_dash/
+    - lib/map_shit/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
