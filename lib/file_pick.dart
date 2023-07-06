@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:test_app/run_visualizer/run_compare_visualizer.dart';
 import 'run_visualizer/run_visualizer.dart';
-import 'map_shit/stage_view.dart';
 import 'dart:convert';
 
 /// Visualizes a run, with items from each stage on a timeline
@@ -36,10 +35,10 @@ class FilePick extends StatelessWidget {
                 } else {
                   String json = const Utf8Decoder().convert(lst.toList());
                   //print('wtf');
-                  // runApp(RunVisualizer(json: json)); */
-                  runApp(StageView(json: json));
+                  runApp(RunVisualizer(json: json));
                 }
               } else {
+                // ignore: avoid_print
                 print("ERROR ERROR");
               }
             });
