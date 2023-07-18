@@ -16,9 +16,13 @@ String? getPortraitFromEvent(Map event) {
   if (event["eventType"] == "InventoryEvent") {
     return "$inv${event["item"]["englishName"].replaceAll("?", "x")}.png";
 
-    // tps
-  } else if (eventType == "ChargeStartEvent" || eventType == "ChargeEndEvent") {
+    // tp start is visible, end doesn't matter
+  } else if (eventType == "ChargeStartEvent") {
     return "${misc}teleporter.png";
+
+    // tp end is a null boi
+  } else if (eventType == "TeleportHitEvent") {
+    return "hidden";
 
     // bosses
   } else if (eventType == "BossKillEvent") {
@@ -32,6 +36,11 @@ String? getPortraitFromEvent(Map event) {
     // footprints
   } else if (eventType == "CharacterExistEvent") {
     return "${misc}feet.png";
+
+    // spawn in
+  } else if (eventType == "SpawnInEvent") {
+    String bodyName = event["character"].replaceAll("?", "x");
+    return "$body$bodyName.png";
 
     // NONE OF THE ABOVE
   } else {

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'map_to_image_helper.dart';
 import '../util.dart';
@@ -24,7 +26,7 @@ class StageOverlayer extends StatelessWidget {
             alignment: Alignment.topCenter,
             children: [
               ...(() {
-                if (item["eventType"] != "CharacterExistEvent") {
+                if (item["eventType"] != "CharacterExistEvent" && portraitURL != "hidden") {
                   return [
                     Container(
                       height: size[0],
@@ -47,7 +49,7 @@ class StageOverlayer extends StatelessWidget {
                       timeFormat(item["timestamp"] - startTime).toString(),
                     ),
                   ];
-                } else {
+                } else if (portraitURL != "hidden") {
                   return [
                     Image(
                       image: AssetImage(portraitURL),
@@ -55,6 +57,9 @@ class StageOverlayer extends StatelessWidget {
                       height: size[1],
                     )
                   ];
+                } else {
+                  print("hidden");
+                  return [Text("balls")];
                 }
               }()),
             ],
@@ -147,6 +152,9 @@ class LinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     print("PAINTING, NERD $size, ${canvas.runtimeType}");
+    const Color preTp = Color.fromARGB(185, 29, 202, 38), postTp = Color.fromARGB(162, 219, 33, 33), midTp = Color.fromARGB(188, 61, 128, 252);
+    const List<Color> lineColors = [preTp, midTp, postTp];
+    int tpColor = 0;
 
     Offset? oldPos;
     for (var event in events) {
@@ -161,8 +169,8 @@ class LinePainter extends CustomPainter {
         Offset newPos = Offset(percents[0], percents[1]);
 
         var pnt = Paint();
-        pnt.color = Colors.black;
-        pnt.strokeWidth = 7;
+        pnt.color = lineColors[min(tpColor, lineColors.length)];
+        pnt.strokeWidth = 4;
         canvas.drawLine(
           oldPos,
           newPos,
@@ -170,6 +178,8 @@ class LinePainter extends CustomPainter {
         );
         oldPos = newPos;
       }
+
+      if (event["eventType"].contains("Charge")) tpColor++;
     }
   }
 

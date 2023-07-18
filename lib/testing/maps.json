@@ -1,0 +1,119 @@
+{
+    "sulfurpools": {
+        "englishName": "Sulfur Pools",
+        "minx": -198.766,
+        "maxx": 218.5687,
+        "miny": -219.0,
+        "maxy": 188.0,
+        "maxz": 61.94404,
+        "minz": -20.85905
+    },
+    "skymeadow": {
+        "englishName": "Sky Meadow",
+        "minx": -271.807,
+        "maxx": 308.2101,
+        "miny": -314.0,
+        "maxy": 282.0,
+        "maxz": 158.3677,
+        "minz": -47.13715
+    },
+    "rootjungle": {
+        "englishName": "Sundred Grove",
+        "minx": -205.0707,
+        "maxx": 203.6228,
+        "miny": -270.0,
+        "maxy": 223.0,
+        "maxz": 170.149,
+        "minz": -35.2347
+    },
+    "frozenwall": {
+        "englishName": "Rallypoint Delta",
+        "minx": -280.3594,
+        "maxx": 292.2332,
+        "miny": -268.0,
+        "maxy": 258.0,
+        "maxz": 151.9686,
+        "minz": 19.06808
+    },
+    "foggyswamp": {
+        "englishName": "Wetland Aspect",
+        "minx": -161.8454,
+        "maxx": 316.0738,
+        "miny": -393.0,
+        "maxy": 126.0,
+        "maxz": -43.95849,
+        "minz": -135.6182
+    },
+    "ancientloft": {
+        "englishName": "Aphelian Sanctuary",
+        "minx": -136.3372,
+        "maxx": 267.8615,
+        "miny": -294.0,
+        "maxy": 285.0,
+        "maxz": 110.2101,
+        "minz": 21.12124
+    },
+    "goolake": {
+        "englishName": "Abandoned Aqueducts",
+        "minx": -95.15573,
+        "maxx": 338.6462,
+        "miny": -408.0,
+        "maxy": 298.0,
+        "maxz": -37.14188,
+        "minz": -147.6321
+    },
+    "wispgraveyard": {
+        "englishName": "Scorched Acres",
+        "minx": -406.8379,
+        "maxx": 196.4715,
+        "miny": -276.0,
+        "maxy": 334.0,
+        "maxz": 112.6052,
+        "minz": -1.869934
+    },
+    "snowyforest": {
+        "englishName": "Siphoned Forest",
+        "minx": -242.6948,
+        "maxx": 167.2501,
+        "miny": -280.0,
+        "maxy": 258.0,
+        "maxz": 96.1072,
+        "minz": 33.36117
+    },
+    "blackbeach": {
+        "englishName": "Distant Roost",
+        "minx": -327.9521,
+        "maxx": 229.1508,
+        "miny": -386.0,
+        "maxy": 16.0,
+        "maxz": -99.07886,
+        "minz": -226.1218
+    },
+    "dampcave": {
+        "englishName": "Abyssal Depths",
+        "minx": -204.5338,
+        "maxx": 244.8176,
+        "miny": -624.0,
+        "maxy": 76.0,
+        "maxz": -44.92059,
+        "minz": -156.107
+    },
+    "shipgraveyard": {
+        "englishName": "Siren's Call",
+        "minx": -157.59,
+        "maxx": 194.23,
+        "miny": -204.0,
+        "maxy": 213.0,
+        "maxz": 179.9644,
+        "minz": -37.02754
+    },
+    "moon": {
+        "englishName": "Commencement",
+        "minx": -719.3372,
+        "maxx": 1112.766,
+        "miny": -372.0,
+        "maxy": 1188.0,
+        "maxz": 554.3207,
+        "minz": -258.7003
+    }
+}

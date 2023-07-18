@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'file_pick.dart';
-import 'dart:io';
-import 'dart:convert';
 import './testing/pog_out.dart';
+import 'map_shit/stage_view.dart';
 
 /// run it.
 void main() {
-  var map = "snowyforest";
-  var path = "D:/Flutter/stages/Images/MAP_${map!.toUpperCase()}_TITLE/";
+  var map = "frozenwall";
+  var path = "D:/Flutter/stages/Images/MAP_${map.toUpperCase()}_TITLE/";
   print(path);
-  runApp(const FilePick());
+  runApp(const FilePick(
+    displayMode: DisplayMode.stageOverlayer,
+  ));
   //runApp(PogOut(folder: path));
 }

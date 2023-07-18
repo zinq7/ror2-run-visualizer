@@ -18,7 +18,7 @@ List getStageEvents(Map json) {
   int stage = 1;
 
   // loop through and fill list with stages
-  while (!events[1].isEmpty) {
+  while (events[1] != null && !events[1].isEmpty) {
     stageEvents.add(events[0]); // events[0] is the stage
 
     events = getStage(events[1]); // events[1] is the rest
