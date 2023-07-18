@@ -55,10 +55,10 @@ dev_dependencies:
 flutter:
   assets: 
     - lib/assets/
-    - lib/assets/body_portraits_english_x/
-    - lib/assets/item_icons_english/
+    - lib/assets/bodies/
+    - lib/assets/items/
     - lib/assets/misc/
-    - lib/assets/stage_icons_english_dash/
+    - lib/assets/stages/
     - lib/map_shit/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

@@ -65,7 +65,7 @@ class Stage extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image(
-                    image: AssetImage("lib/assets/body_portraits_english_x/$bossName.png"),
+                    image: AssetImage("lib/assets/bodies/$bossName.png"),
                   ),
                 ),
               ),
@@ -103,7 +103,7 @@ class Stage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Image(
-                    image: AssetImage("lib/assets/item_icons_english/$itemName.png"),
+                    image: AssetImage("lib/assets/items/$itemName.png"),
                     width: 64,
                     height: 64,
                   ),
@@ -132,7 +132,7 @@ class Stage extends StatelessWidget {
       child: ClipRRect(
         borderRadius: corners * 0.75,
         child: Image(
-          image: AssetImage("lib/assets/stage_icons_english_dash/${stageName.replaceFirst(RegExp(r":"), " -")}.png"),
+          image: AssetImage("lib/assets/stages/$stageName.png"),
           width: 156,
           height: 94,
         ),

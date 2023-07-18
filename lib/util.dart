@@ -5,16 +5,16 @@ String timeFormat(double time) {
 
 String? getPortraitFromEvent(Map event) {
   const basePath = "lib/assets/";
-  const inv = "${basePath}item_icons_english/";
-  const body = "${basePath}body_portraits_english_x/";
-  const stage = "${basePath}stage_icons_english_dash/";
+  const inv = "${basePath}items/";
+  const body = "${basePath}bodies/";
+  const stage = "${basePath}stages/";
   const misc = "${basePath}misc/";
 
   String eventType = event["eventType"];
 
   // items
   if (event["eventType"] == "InventoryEvent") {
-    return "$inv${event["item"]["englishName"].replaceAll("?", "x")}.png";
+    return "$inv${event["item"]["englishName"]}.png";
 
     // tp start is visible, end doesn't matter
   } else if (eventType == "ChargeStartEvent") {
@@ -26,11 +26,7 @@ String? getPortraitFromEvent(Map event) {
 
     // bosses
   } else if (eventType == "BossKillEvent") {
-    String bossName = event["boss"].replaceAll("?", "w");
-    List eliteNames = ["Overloading", "Blazing", "Mending", "Glacial"];
-    for (String x in eliteNames) {
-      bossName = bossName.replaceAll("$x ", "");
-    }
+    String bossName = event["boss"];
     return "$body$bossName.png";
 
     // footprints
@@ -39,7 +35,7 @@ String? getPortraitFromEvent(Map event) {
 
     // spawn in
   } else if (eventType == "SpawnInEvent") {
-    String bodyName = event["character"].replaceAll("?", "x");
+    String bodyName = event["character"];
     return "$body$bodyName.png";
 
     // NONE OF THE ABOVE
