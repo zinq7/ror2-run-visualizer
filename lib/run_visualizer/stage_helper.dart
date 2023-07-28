@@ -18,7 +18,7 @@ List getStageEvents(Map json) {
   int stage = 1;
 
   // loop through and fill list with stages
-  while (!events[1].isEmpty) {
+  while (events[1] != null && !events[1].isEmpty) {
     stageEvents.add(events[0]); // events[0] is the stage
 
     events = getStage(events[1]); // events[1] is the rest
@@ -39,7 +39,7 @@ Stage analyzeStage(
   String runner = "none",
 }) {
   // DECLARE VARIABLES FOR ANALYSIS
-  List<dynamic> gains = [], losses = [], bosses = []; // yes
+  List<dynamic> gains = [], losses = [], worldEvents = []; // yes
   String stageName = "none";
   int stageNum = -1;
   double startTime, endTime, duration;
@@ -48,7 +48,7 @@ Stage analyzeStage(
   startTime = stage[0]["timestamp"];
   endTime = stage[stage.length - 1]["timestamp"];
   duration = endTime - startTime;
-  print("start: $startTime, end: $endTime, length: $duration");
+  // print("start: $startTime, end: $endTime, length: $duration");
 
   // items in stages
   for (int i = 0; i < stage.length; i++) {
@@ -57,9 +57,9 @@ Stage analyzeStage(
     switch (event["eventType"]) {
       // stage start
       case "StageStartEvent":
-        stageName = event["stageNum"] == 6 ? "Commencement" : event["englishName"];
+        stageName = event["stageNum"] == 6 ? "MAP_MOON_TITLE" : event["englishName"];
         stageNum = event["stageNum"];
-        if (stageNum == 5) nextStage = "Commencement";
+        if (stageNum == 5) nextStage = "MAP_MOON_TITLE";
         break;
 
       // inventory event
@@ -70,8 +70,20 @@ Stage analyzeStage(
         break;
 
       // boss event
+      case "DeathEvent":
+        losses.add({
+          "eventType": "KillEvent",
+          "killerBody": event["killer"],
+          "x": event["x"],
+          "y": event["y"],
+          "z": event["z"],
+          "timestamp": event["timestamp"],
+        });
+        worldEvents.add(event);
+        break;
+
       case "BossKillEvent":
-        bosses.add(event);
+        worldEvents.add(event);
         break;
     }
   }
@@ -83,7 +95,7 @@ Stage analyzeStage(
     itemGains: List<dynamic>.from(gains),
     itemLosses: List<dynamic>.from(losses),
     stageName: stageName,
-    bosses: bosses,
+    worldEvents: worldEvents,
     nextStage: nextStage,
     sideInfo: leftItem,
     runner: runner,

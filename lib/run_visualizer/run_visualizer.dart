@@ -24,8 +24,10 @@ class RunVisualizer extends StatelessWidget {
       String nextStage = "";
       if (k + 1 < stageJSONs.length) nextStage = stageJSONs[k + 1][0]["englishName"];
       stages.add(analyzeStage(stageJSONs[k], nextStage));
-      print('analyzing stage ${stageJSONs[k][0]["englishName"]}');
+      // print('analyzing stage ${stageJSONs[k][0]["englishName"]}');
       totalTime += stages[k].endTime - stages[k].startTime;
+      var s = stages[stages.length - 1];
+      if (s.worldEvents.isNotEmpty) print(s.worldEvents[s.worldEvents.length - 1]);
     }
 
     return MaterialApp(
