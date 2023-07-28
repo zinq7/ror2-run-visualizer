@@ -1,5 +1,8 @@
+import 'dart:async';
+
 /// Takes a time and returns the min:sec string representation
 String timeFormat(double time) {
+  time = time / 1000; // milliseconds
   return "${(time / 60).floor()}:${time % 60 < 10 ? "0" : ""}${(time % 60).floor()}";
 }
 
@@ -24,8 +27,16 @@ String? getPortraitFromEvent(Map event) {
   } else if (eventType == "TeleportHitEvent") {
     return "hidden";
 
+    // fucking dying
+  } else if (eventType == "DeathEvent") {
+    return "${misc}DeathEvent.png";
+
+    // getting killed
+  } else if (eventType == "KillEvent") {
+    return "$body${event["killerBody"]}.png";
+
     // bosses
-  } else if (eventType == "BossKillEvent") {
+  } else if (eventType == "BossKillEvent" || eventType == "BossSpawnEvent") {
     String bossName = event["boss"];
     return "$body$bossName.png";
 

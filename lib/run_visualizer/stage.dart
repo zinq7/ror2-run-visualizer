@@ -9,7 +9,7 @@ import 'profile_pic_map.dart';
 /// A timeline of item gains + losses, and boss + tps.
 /// The next stage and split time
 class Stage extends StatelessWidget {
-  final List<dynamic> itemGains, itemLosses, bosses;
+  final List<dynamic> itemGains, itemLosses, worldEvents;
   final String stageName, nextStage, runner;
   final double startTime, endTime;
   final int stageNum;
@@ -23,7 +23,7 @@ class Stage extends StatelessWidget {
     required this.startTime,
     required this.endTime,
     required this.stageNum,
-    required this.bosses,
+    required this.worldEvents,
     this.textStyle = const TextStyle(
       color: Colors.white,
       fontSize: 18,
@@ -36,16 +36,12 @@ class Stage extends StatelessWidget {
   });
 
   /// Add a bunch of Widgets into [boss] based on the ones in [bosses]
-  void makeBossImageList(List boss, List bosses) {
-    for (final dynamic event in bosses) {
-      String bossName = event["boss"].replaceAll("?", "w");
-      List eliteNames = ["Overloading", "Blazing", "Mending", "Glacial"];
-      for (String x in eliteNames) {
-        bossName = bossName.replaceAll("$x ", "");
-      }
+  void makeWorldImageList(List world, List worldEvents) {
+    for (final dynamic event in worldEvents) {
+      String imageId = getPortraitFromEvent(event)!; // get it
 
       // The component: confusing
-      boss.add(
+      world.add(
         LayoutId(
           id: event.hashCode,
           child: Stack(
@@ -65,7 +61,7 @@ class Stage extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image(
-                    image: AssetImage("lib/assets/bodies/$bossName.png"),
+                    image: AssetImage(imageId),
                   ),
                 ),
               ),
@@ -82,8 +78,8 @@ class Stage extends StatelessWidget {
 
   void makeItemImageList(List<Widget> w, List<dynamic> items) {
     for (int i = 0; i < items.length; i++) {
-      var item = items[i];
-      var itemName = item["item"]["englishName"];
+      var item = items[i]; // can be a "killevent"
+      //  var itemName = item["item"]["englishName"];
       w.add(
         LayoutId(
           id: item.hashCode,
@@ -102,10 +98,13 @@ class Stage extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Image(
-                    image: AssetImage("lib/assets/items/$itemName.png"),
-                    width: 64,
-                    height: 64,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image(
+                      image: AssetImage(getPortraitFromEvent(item)!),
+                      width: 64,
+                      height: 64,
+                    ),
                   ),
                 ),
                 Text(
@@ -142,11 +141,11 @@ class Stage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> gains = [], losses = [], boss = [];
+    List<Widget> gains = [], losses = [], world = [];
 
     makeItemImageList(gains, itemGains);
     makeItemImageList(losses, itemLosses);
-    makeBossImageList(boss, bosses); // not clear but ok
+    makeWorldImageList(world, worldEvents); // not clear but ok
 
     // minor fix if you lose no items, still add an empty box. needs a layout ID to be processed.
     if (losses.isEmpty) {
@@ -249,10 +248,10 @@ class Stage extends StatelessWidget {
                     CustomMultiChildLayout(
                       delegate: PositionItems(
                         stage: this,
-                        items: bosses,
+                        items: worldEvents,
                         offset: const Offset(0, -26), // magic number alert, but it works :)
                       ),
-                      children: boss,
+                      children: world,
                     ),
                   ],
                 ),
