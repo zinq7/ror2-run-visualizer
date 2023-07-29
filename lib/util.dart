@@ -6,6 +6,12 @@ String timeFormat(double time) {
   return "${(time / 60).floor()}:${time % 60 < 10 ? "0" : ""}${(time % 60).floor()}";
 }
 
+String? getInteractablePortrait(Map interactable) {
+  const iconPath = "lib/assets/icons/";
+  return "$iconPath${interactable["interactorName"]}.png";
+  // return null;
+}
+
 String? getPortraitFromEvent(Map event) {
   const basePath = "lib/assets/";
   const inv = "${basePath}items/";
