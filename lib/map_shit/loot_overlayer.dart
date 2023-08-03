@@ -53,27 +53,32 @@ class _LootOverlayerState extends State<LootOverlayer> {
       );
     }
 
-    return Stack(
-      children: [
-        Image.asset(
-          map_helper.stageMap["Siphoned Forest"]!["image"] as String,
-          width: 2048,
-          height: 1024,
-          fit: BoxFit.fill,
-        ),
-        SizedBox(
-          width: 2048,
-          height: 1024,
-          child: CustomMultiChildLayout(
-            delegate: RatiodItemOverlayer(
-              ratio: map_helper.stageMap["Siphoned Forest"]!["ratio"] as Function,
-              events: widget.loot,
-              isEvent: false,
+    return Container(
+      color: const Color.fromARGB(255, 67, 87, 111),
+      child: Center(
+        child: Stack(
+          children: [
+            Image.asset(
+              map_helper.stageMap["Distant Roost 2"]!["image"] as String,
+              width: 1028,
+              height: 508,
+              fit: BoxFit.fill,
             ),
-            children: loot,
-          ),
-        )
-      ],
+            SizedBox(
+              width: 1028,
+              height: 508,
+              child: CustomMultiChildLayout(
+                delegate: RatiodItemOverlayer(
+                  ratio: map_helper.stageMap["Distant Roost 2"]!["ratio"] as Function,
+                  events: widget.loot,
+                  isEvent: false,
+                ),
+                children: loot,
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
