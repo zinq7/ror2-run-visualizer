@@ -46,12 +46,11 @@ Stage analyzeStage(
   List<dynamic> gains = [], losses = [], worldEvents = []; // yes
   String stageName = "none";
   int stageNum = -1;
-  double startTime, endTime, duration;
+  double startTime, endTime;
 
   // first event stageStart, last gstageSplit
   startTime = stage[0]["timestamp"];
   endTime = stage[stage.length - 1]["timestamp"];
-  duration = endTime - startTime;
   // print("start: $startTime, end: $endTime, length: $duration");
 
   // items in stages
