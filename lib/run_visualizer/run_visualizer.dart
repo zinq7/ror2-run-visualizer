@@ -45,7 +45,7 @@ class RunVisualizer extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 51, 51, 51), //const Color.fromARGB(75, 125, 127, 128),
       ),
       home: StageDisplayer(
-        runTitle: "Sample Run - played by the amazing player 'zinq' in ${timeFormat(totalTime)}",
+        runTitle: "Sample Run - played by an amazing player in ${timeFormat(totalTime)}",
         stages: stages,
         background: const AssetImage(
           "lib/assets/misc/background.jpg",

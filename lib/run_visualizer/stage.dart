@@ -200,7 +200,7 @@ class Stage extends StatelessWidget {
               textScaleFactor: 3.0,
             );
           } else if (sideInfo == SideInfo.profilePics) {
-            String profPic = MAP[runner]!;
+            String profPic = getPfp(runner);
             return Container(
               decoration: BoxDecoration(
                 color: Colors.black38,
@@ -209,10 +209,19 @@ class Stage extends StatelessWidget {
                   width: 5,
                 ),
               ),
-              child: Image.network(
-                profPic,
-                width: 70,
-                height: 70,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.network(
+                    profPic,
+                    width: 70,
+                    height: 70,
+                  ),
+                  Text(
+                    runner,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ],
               ),
             );
           } else {

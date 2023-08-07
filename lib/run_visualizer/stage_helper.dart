@@ -48,7 +48,7 @@ Stage analyzeStage(
   int stageNum = -1;
   double startTime, endTime, duration;
 
-  // first event stageStart, last stageSplit
+  // first event stageStart, last gstageSplit
   startTime = stage[0]["timestamp"];
   endTime = stage[stage.length - 1]["timestamp"];
   duration = endTime - startTime;
@@ -57,6 +57,7 @@ Stage analyzeStage(
   // items in stages
   for (int i = 0; i < stage.length; i++) {
     var event = stage[i]; // get ev
+    // print("event $event");
 
     switch (event["eventType"]) {
       // stage start
@@ -88,6 +89,11 @@ Stage analyzeStage(
 
       case "BossKillEvent":
         worldEvents.add(event);
+        break;
+
+      case "BossSpawnEvent":
+        // print("wtf a $event");
+        // TODO: THIS
         break;
     }
   }
