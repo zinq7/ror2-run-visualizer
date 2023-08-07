@@ -1,17 +1,19 @@
-import 'dart:async';
+// ignore_for_file: unused_local_variable
 
-/// Takes a time and returns the min:sec string representation
+/// Takes a [time] and returns the min:sec string representation
 String timeFormat(double time) {
   time = time / 1000; // milliseconds
   return "${(time / 60).floor()}:${time % 60 < 10 ? "0" : ""}${(time % 60).floor()}";
 }
 
+/// gets a portrait for a [json] interactable object if application
 String? getInteractablePortrait(Map interactable) {
   const iconPath = "lib/assets/icons/";
   return "$iconPath${interactable["interactorName"]}.png";
   // return null;
 }
 
+/// gets a portrait for a [json] event, including portraits for **items, bodies, stages, and misc/assets**
 String? getPortraitFromEvent(Map event) {
   const basePath = "lib/assets/";
   const inv = "${basePath}items/";

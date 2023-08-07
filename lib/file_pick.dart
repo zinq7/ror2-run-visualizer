@@ -6,9 +6,22 @@ import 'run_visualizer/run_visualizer.dart';
 import 'dart:convert';
 
 /// Visualizes a run, with items from each stage on a timeline
-class FilePick extends StatelessWidget {
-  DisplayMode displayMode;
-  FilePick({super.key, this.displayMode = DisplayMode.runVisualizer});
+class FilePick extends StatefulWidget {
+  final DisplayMode defaultDisplayMode;
+  const FilePick({super.key, this.defaultDisplayMode = DisplayMode.runVisualizer});
+
+  @override
+  State<StatefulWidget> createState() => FilePickState();
+}
+
+class FilePickState extends State<FilePick> {
+  late DisplayMode displayMode;
+
+  @override
+  void initState() {
+    displayMode = widget.defaultDisplayMode;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
