@@ -9,7 +9,7 @@ void main() {
   var path = "D:/Flutter/stages/Images/MAP_${map.toUpperCase()}_TITLE/";
   print(path);
   runApp(const FilePick(
-    displayMode: DisplayMode.runVisualizer,
+    displayMode: DisplayMode.stageOverlayer,
   ));
   //runApp(PogOut(folder: path));
 }

@@ -5,10 +5,10 @@ import 'map_to_image_helper.dart';
 import '../util.dart';
 import 'dart:ui';
 
-class StageOverlayer extends StatelessWidget {
+class EventOverlayer extends StatelessWidget {
   final List stageEvents;
   final double startTime;
-  const StageOverlayer({super.key, required this.stageEvents, this.startTime = 0});
+  const EventOverlayer({super.key, required this.stageEvents, this.startTime = 0});
 
   void makeImageList(List<Widget> w, List<dynamic> events) {
     for (Map item in events) {
@@ -80,7 +80,7 @@ class StageOverlayer extends StatelessWidget {
       children: [
         Image.asset(stageMap["Siphoned Forest"]!["image"] as String),
         CustomMultiChildLayout(
-          delegate: EventOverlayerDelegate(
+          delegate: RatiodItemOverlayer(
             events: stageEvents,
             ratio: stageMap["Siphoned Forest"]!["ratio"] as Function,
           ),
@@ -98,17 +98,17 @@ class StageOverlayer extends StatelessWidget {
   }
 }
 
-class EventOverlayerDelegate extends MultiChildLayoutDelegate {
+class RatiodItemOverlayer extends MultiChildLayoutDelegate {
   List events;
   Function ratio;
   Offset offset;
-  EventOverlayerDelegate({required this.events, required this.ratio, this.offset = Offset.zero});
+  bool isEvent;
+  RatiodItemOverlayer({required this.events, required this.ratio, this.offset = Offset.zero, this.isEvent = true});
 
   @override
   void performLayout(Size size) {
-    Offset? lastPos;
     for (Map item in events) {
-      if (getPortraitFromEvent(item) == null) continue;
+      if ((isEvent && getPortraitFromEvent(item) == null) || getInteractablePortrait(item) == null) continue;
       if (item["x"] == 0 && item["z"] == 0) continue;
 
       // set constraints

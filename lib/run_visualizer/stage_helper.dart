@@ -32,6 +32,10 @@ List getStageEvents(Map json) {
   return stageEvents;
 }
 
+List getStageItems(Map json) {
+  return json["stageLoots"][0]["stageLoot"];
+}
+
 Stage analyzeStage(
   List stage,
   String nextStage, {
