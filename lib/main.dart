@@ -5,11 +5,8 @@ import 'map_shit/stage_view.dart';
 
 /// run it.
 void main() {
-  var map = "frozenwall";
-  var path = "D:/Flutter/stages/Images/MAP_${map.toUpperCase()}_TITLE/";
-  print(path);
-  runApp(const FilePick(
-    displayMode: DisplayMode.stageOverlayer,
+  runApp(FilePick(
+    displayMode: DisplayMode.runVisualizer,
   ));
   //runApp(PogOut(folder: path));
 }

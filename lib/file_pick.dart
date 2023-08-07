@@ -7,51 +7,97 @@ import 'dart:convert';
 
 /// Visualizes a run, with items from each stage on a timeline
 class FilePick extends StatelessWidget {
-  final DisplayMode displayMode;
-  const FilePick({super.key, this.displayMode = DisplayMode.runVisualizer});
+  DisplayMode displayMode;
+  FilePick({super.key, this.displayMode = DisplayMode.runVisualizer});
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: InkWell(
-          onTap: () {
-            var res = FilePicker.platform.pickFiles(withData: true, type: FileType.custom, allowedExtensions: ["run.json"], allowMultiple: true);
-            res.then((response) {
-              var lst = response?.files[0].bytes;
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scaffold(
+        bottomSheet: ButtonBar(
+          alignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              onPressed: () {
+                displayMode = DisplayMode.runVisualizer;
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.black),
+              ),
+              child: const Text(
+                "Run Visualizer",
+                textScaleFactor: 4,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                displayMode = DisplayMode.stageDisplayer;
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.black),
+              ),
+              child: const Text(
+                "Text Data",
+                textScaleFactor: 4,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                displayMode = DisplayMode.stageOverlayer;
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.black),
+              ),
+              child: const Text(
+                "Map Shit",
+                textScaleFactor: 4,
+              ),
+            ),
+          ],
+        ),
+        body: Material(
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: InkWell(
+              onTap: () {
+                var res = FilePicker.platform.pickFiles(withData: true, type: FileType.custom, allowedExtensions: ["run.json"], allowMultiple: true);
+                res.then((response) {
+                  var lst = response?.files[0].bytes;
 
-              if (lst != null) {
-                List<String> jsons = [];
+                  if (lst != null) {
+                    List<String> jsons = [];
 
-                for (var file in response!.files) {
-                  var filyBytes = file.bytes;
-                  String json = const Utf8Decoder().convert(filyBytes!.toList());
-                  jsons.add(json);
-                }
+                    for (var file in response!.files) {
+                      var filyBytes = file.bytes;
+                      String json = const Utf8Decoder().convert(filyBytes!.toList());
+                      jsons.add(json);
+                    }
 
-                // handle with json
-                switch (displayMode) {
-                  case DisplayMode.runVisualizer:
-                    runVisualizer(jsons);
-                    break;
-                  case DisplayMode.stageOverlayer:
-                    stageOverlayer(jsons);
-                    break;
-                  default:
-                    break;
-                }
-              } else {
-                // ignore: avoid_print
-                throw ("no file selected");
-              }
-            });
-          },
-          child: Image(
-            image: const AssetImage("lib/assets/misc/select_file.png"),
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
+                    // handle with json
+                    switch (displayMode) {
+                      case DisplayMode.runVisualizer:
+                        runVisualizer(jsons);
+                        break;
+                      case DisplayMode.stageOverlayer:
+                        stageOverlayer(jsons);
+                        break;
+                      default:
+                        break;
+                    }
+                  } else {
+                    // ignore: avoid_print
+                    throw ("no file selected");
+                  }
+                });
+              },
+              child: Image(
+                image: const AssetImage("lib/assets/misc/select_file.png"),
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ),
       ),

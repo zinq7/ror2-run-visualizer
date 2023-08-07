@@ -42,7 +42,7 @@ class RunComparerState extends State<RunComparer> {
         stageJSONs[_stageNum],
         nextStage,
         leftItem: SideInfo.profilePics,
-        runner: runJSON["runner"],
+        runner: runJSON["player"],
       ));
     }
 
