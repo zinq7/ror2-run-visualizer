@@ -9,6 +9,10 @@ String timeFormat(double time) {
 /// gets a portrait for a [json] interactable object if application
 String? getInteractablePortrait(Map interactable) {
   const iconPath = "lib/assets/icons/";
+  const path2 = "lib/assets/items/";
+  if (interactable["loot"].isEmpty) return null;
+
+  return "$path2${interactable["loot"][0]["nameToken"]}.png";
   return "$iconPath${interactable["interactorName"]}.png";
   // return null;
 }
