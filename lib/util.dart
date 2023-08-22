@@ -1,5 +1,7 @@
 // ignore_for_file: unused_local_variable
 
+import 'dart:ui';
+
 /// Takes a [time] and returns the min:sec string representation
 String timeFormat(double time) {
   time = time / 1000; // milliseconds
@@ -9,12 +11,53 @@ String timeFormat(double time) {
 /// gets a portrait for a [json] interactable object if application
 String? getInteractablePortrait(Map interactable) {
   const iconPath = "lib/assets/icons/";
-  const path2 = "lib/assets/items/";
-  if (interactable["loot"].isEmpty) return null;
 
-  return "$path2${interactable["loot"][0]["nameToken"]}.png";
   return "$iconPath${interactable["interactorName"]}.png";
   // return null;
+}
+
+List<List<num>> positionMultiItems(int count, List<num> pos) {
+  switch (count) {
+    case 1:
+      // single centered
+      return [
+        [0, 0],
+      ];
+    case 2:
+      // side by side
+      return [
+        [-pos[0] / 2, 0],
+        [pos[0] / 2, 0],
+      ];
+    case 3:
+      // triangle with single top
+      return [
+        [-pos[0] / 2, -pos[1] / 2], // bottom left
+        [pos[0] / 2, -pos[1] / 2], // bottom right
+        [0, pos[1] / 2], // top
+      ];
+    case 4:
+      // four corners square
+      return [
+        [-pos[0] / 2, -pos[1] / 2], // bottom left
+        [-pos[0] / 2, pos[1] / 2], // top left
+        [pos[0] / 2, -pos[1] / 2], // bottom right
+        [pos[0] / 2, -pos[1] / 2], // top right
+      ];
+  }
+  return [] as List<List<num>>;
+}
+
+List<String> getItemPortraitFromInteractable(Map interactable) {
+  const itemPath = "lib/assets/items/";
+
+  var list = <String>[];
+  for (Map item in interactable["loot"]) {
+    var name = item["nameToken"];
+    list.add("$itemPath$name.png");
+  }
+
+  return list;
 }
 
 /// gets a portrait for a [json] event, including portraits for **items, bodies, stages, and misc/assets**

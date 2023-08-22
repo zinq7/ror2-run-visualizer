@@ -14,7 +14,7 @@ List siphoned(x, y, stageX, stageY) {
   ];
 }
 
-List roost(x, y, stageX, stageY) {
+List roost2(x, y, stageX, stageY) {
   const xStart = -315, xEnd = 245;
   const yStart = -181, yEnd = 165;
 
@@ -28,13 +28,42 @@ List roost(x, y, stageX, stageY) {
   ];
 }
 
-const stageMap = {
+List ratioWithCorners(
+    // item constants
+    itemX,
+    itemY,
+    stageImageX,
+    stageImageY,
+    // stage constants
+    left,
+    top,
+    right,
+    bottom) {
+  // do math
+  double xCoeff = ((itemX - left) / (right - left));
+  double yCoeff = ((itemY - top) / (bottom - top));
+
+  return [
+    stageImageX * xCoeff,
+    stageImageY * yCoeff,
+  ];
+}
+
+Map stageMap = {
   "Siphoned Forest": {
     "image": "lib/map_shit/accurate_siphoned.png",
     "ratio": siphoned,
   },
   "Distant Roost 2": {
     "image": "lib/map_shit/pogbeach2.png",
-    "ratio": roost,
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, -315, 165, 245, -181),
   },
+  "Distant Roost": {
+    "image": "lib/assets/maps/blackbeach.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, -463, 125, 460, -393),
+  }
 };
+
+// blackbeach_goodfov
+// topleft: -463, 0, 125
+// bottomright: 460, 0, -393

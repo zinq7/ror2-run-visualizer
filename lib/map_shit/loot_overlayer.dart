@@ -19,8 +19,10 @@ class _LootOverlayerState extends State<LootOverlayer> {
     List<Widget> loot = [];
 
     for (var loot_thing in widget.loot) {
-      String? portrait = getInteractablePortrait(loot_thing);
-      if (portrait == null) continue;
+      String? interactablePortrait = getInteractablePortrait(loot_thing);
+      List<String> lootPortraits = getItemPortraitFromInteractable(loot_thing);
+
+      if (interactablePortrait == null) continue;
 
       var size = [64.0, 64.0];
 
@@ -42,7 +44,7 @@ class _LootOverlayerState extends State<LootOverlayer> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Image(
-                  image: AssetImage(portrait),
+                  image: AssetImage(interactablePortrait),
                   width: size[0],
                   height: size[1],
                 ),
@@ -59,7 +61,7 @@ class _LootOverlayerState extends State<LootOverlayer> {
         child: Stack(
           children: [
             Image.asset(
-              map_helper.stageMap["Distant Roost 2"]!["image"] as String,
+              map_helper.stageMap["Distant Roost"]!["image"] as String,
               width: 1028,
               height: 508,
               fit: BoxFit.fill,
@@ -69,7 +71,7 @@ class _LootOverlayerState extends State<LootOverlayer> {
               height: 508,
               child: CustomMultiChildLayout(
                 delegate: RatiodItemOverlayer(
-                  ratio: map_helper.stageMap["Distant Roost 2"]!["ratio"] as Function,
+                  ratio: map_helper.stageMap["Distant Roost"]!["ratio"] as Function,
                   events: widget.loot,
                   isEvent: false,
                 ),
