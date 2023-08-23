@@ -5,7 +5,8 @@ import 'package:test_app/util.dart';
 
 class LootOverlayer extends StatefulWidget {
   final List loot;
-  const LootOverlayer({super.key, required this.loot});
+  final String mapName;
+  const LootOverlayer({super.key, required this.loot, required this.mapName});
 
   @override
   State<StatefulWidget> createState() => _LootOverlayerState();
@@ -17,6 +18,7 @@ class _LootOverlayerState extends State<LootOverlayer> {
   @override
   Widget build(BuildContext context) {
     List<Widget> loot = [];
+    String mapName = widget.mapName;
 
     for (var loot_thing in widget.loot) {
       String? interactablePortrait = getInteractablePortrait(loot_thing);
@@ -58,27 +60,24 @@ class _LootOverlayerState extends State<LootOverlayer> {
     return Container(
       color: const Color.fromARGB(255, 67, 87, 111),
       child: Center(
-        child: Stack(
-          children: [
-            Image.asset(
-              map_helper.stageMap["Distant Roost"]!["image"] as String,
-              width: 1028,
-              height: 508,
-              fit: BoxFit.fill,
-            ),
-            SizedBox(
-              width: 1028,
-              height: 508,
-              child: CustomMultiChildLayout(
+        child: SizedBox.expand(
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                map_helper.stageMap[mapName]!["image"] as String,
+                fit: BoxFit.fill,
+              ),
+              CustomMultiChildLayout(
                 delegate: RatiodItemOverlayer(
-                  ratio: map_helper.stageMap["Distant Roost"]!["ratio"] as Function,
+                  ratio: map_helper.stageMap[mapName]!["ratio"] as Function,
                   events: widget.loot,
                   isEvent: false,
                 ),
                 children: loot,
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -12,12 +12,14 @@ class StageView extends StatelessWidget {
   Widget build(BuildContext context) {
     // var stageEvents = getStageEvents(jsonDecode(json))[0];
     var stageItems = getStageItems(jsonDecode(json));
+    var mapName = jsonDecode(json)["stageLoots"][0]["stageName"];
 
     return Material(
       child: Directionality(
         textDirection: TextDirection.ltr,
         child: LootOverlayer(
           loot: stageItems,
+          mapName: mapName,
         ),
       ),
     );

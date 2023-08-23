@@ -1,47 +1,28 @@
-List siphoned(x, y, stageX, stageY) {
-  const xScale = 0.2171; // -200 = %, 200 = 1.0 - this%;
-  const realStartX = -(2 * 200 * xScale) - 200, realEndX = -realStartX, realXLength = 2 * realEndX;
-
-  // const yScale = 0; // same here
-  const realEndY = 200, realYLength = 2 * realEndY;
-
-  double xCoeff = (x + realEndX) / realXLength; // x is from -288 to 288. RealEnd is 566. x + 288 / 566 will give %
-  double yCoeff = (y + realEndY) / realYLength;
-
-  return [
-    stageX * xCoeff,
-    stageY * yCoeff,
-  ];
-}
-
-List roost2(x, y, stageX, stageY) {
-  const xStart = -315, xEnd = 245;
-  const yStart = -181, yEnd = 165;
-
-  double xCoeff = ((x - xStart) / (xEnd - xStart));
-  double yCoeff = -((y + yStart) / (yEnd - yStart));
-
-  // print("ratio'd $xCoeff $yCoeff");
-  return [
-    stageX * xCoeff,
-    stageY * yCoeff,
-  ];
-}
-
 List ratioWithCorners(
     // item constants
-    itemX,
     itemY,
+    itemX,
     stageImageX,
     stageImageY,
     // stage constants
     left,
     top,
     right,
-    bottom) {
+    bottom,
+    // rotations
+    {rotation = 0}) {
+  // brotate
+  if (rotation == 90) {
+    var tmp = itemY;
+    itemY = itemX;
+    itemX = tmp;
+  }
+
   // do math
   double xCoeff = ((itemX - left) / (right - left));
   double yCoeff = ((itemY - top) / (bottom - top));
+
+  // print("x: $itemX vs width: ${right - left}, pos: ${xCoeff * (right - left)}\n");
 
   return [
     stageImageX * xCoeff,
@@ -50,20 +31,45 @@ List ratioWithCorners(
 }
 
 Map stageMap = {
-  "Siphoned Forest": {
-    "image": "lib/map_shit/accurate_siphoned.png",
-    "ratio": siphoned,
+  "MAP_SNOWYFOREST_TITLE": {
+    "image": "lib/assets/maps/snowyforest.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, 423, 217, -423, -255, rotation: 90),
   },
-  "Distant Roost 2": {
-    "image": "lib/map_shit/pogbeach2.png",
-    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, -315, 165, 245, -181),
+  "MAP_BLACKBEACH_TITLE_2": {
+    "image": "lib/assets/maps/blackbeach2.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, -405, 226, 417, -233),
   },
-  "Distant Roost": {
+  "MAP_BLACKBEACH_TITLE": {
     "image": "lib/assets/maps/blackbeach.png",
     "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, -463, 125, 460, -393),
+  },
+  "MAP_GOLEMPLAINS_TITLE_2": {
+    "image": "lib/assets/maps/golemplains2.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, -447, 149, 447, -343),
+  },
+  "MAP_GOLEMPLAINS_TITLE": {
+    "image": "lib/assets/maps/golemplains.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, 465, 317, -550, -252, rotation: 90),
   }
 };
+
 
 // blackbeach_goodfov
 // topleft: -463, 0, 125
 // bottomright: 460, 0, -393
+
+// blackbeach2
+// topleft: -405, 226
+// bottomright: 417, -233
+
+// siphonedforest
+// topleft: 217, 423
+// botleft: -255, -423 (parralel :)
+
+// golemplains
+// topleft: 465, 317
+// botright: -550, -252
+
+// golemplains2
+// topleft: -447, 149
+// bottomright: 447, -343

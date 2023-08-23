@@ -122,6 +122,7 @@ class RatiodItemOverlayer extends MultiChildLayoutDelegate {
         ),
       );
 
+      print("ratioing ${item["interactorName"]}");
       var percents = ratio(item["z"], item["x"], size.width, size.height);
       Offset thisPos = offset +
           Offset(percents[0], percents[1]) -
