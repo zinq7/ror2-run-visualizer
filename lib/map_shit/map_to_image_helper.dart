@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 List ratioWithCorners(
     // item constants
     itemY,
@@ -62,8 +64,68 @@ Map stageMap = {
   "MAP_ANCIENTLOFT_TITLE": {
     "image": "lib/assets/maps/ancientloft_v2.png",
     "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, 432, 292, -432, -192, rotation: 90),
+  },
+  "MAP_SULFURPOOLS_TITLE": {
+    "image": "lib/assets/maps/sulfurpools.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, 462, 260, -462, -260),
+  },
+  "MAP_WISPGRAVEYARD_TITLE": {
+    "image": "lib/assets/maps/wispgraveyard.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, -740, 348, 498, -348),
+  },
+  "MAP_FROZENWALL_TITLE": {
+    "image": "lib/assets/maps/frozenwall.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, -540, 304, 540, -304),
+  },
+  "MAP_DAMPCAVESIMPLE_TITLE": {
+    "image": "lib/assets/maps/dampcavesimple.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, -775, 233, 775, -663),
+  },
+  "MAP_SHIPGRAVEYARD_TITLE": {
+    "image": "lib/assets/maps/shipgraveyard.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, 339, 190, -339, -190, rotation: 90),
+  },
+  "MAP_ROOTJUNGLE_TITLE": {
+    "image": "lib/assets/maps/rootjungle_bigplateau.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, 339, 190, -339, -190, rotation: 90),
+  },
+  "MAP_SKYMEADOW_TITLE": {
+    "image": "lib/assets/maps/bridgemeadow.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, 588, 328, -588, -328, rotation: 90),
   }
 };
+
+
+// dampcavesimple
+// tr: -775, 233
+// bl: 775, -663,
+
+// shipgraveyard: (rotation 90)
+// tr: 339, 190
+// bl: -339, -190
+
+// rootjungle: (rotation 90)
+// tr: 339, 190
+// bl: -339, -190 (SAME AS SIRENS 
+// 
+// skymeadow (rotation 90)
+// tr: 588, 328
+// bl: -588, -328
+
+
+// sulfurpools:
+// topleft: -462, 260,
+// bottomright: 462, -260 (fully centered stage nice)
+
+// wispgraveyard: 
+// tr: -740, 348
+// bl: 498, -348
+
+// frozenwall:
+// tr: -540, 304
+// bl: 540, -304
+
+
 
 // ancientloft: (90 rot)
 // topleft: 432, 292
