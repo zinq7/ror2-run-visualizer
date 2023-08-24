@@ -14,6 +14,7 @@ class StageView extends StatefulWidget {
 
 class StageViewState extends State<StageView> {
   int _currentStage = 0;
+  double _slider = 0;
   late Map json;
 
   void changeStage(int stage) {
@@ -21,6 +22,13 @@ class StageViewState extends State<StageView> {
       if (stage >= json["stageLoots"].length) stage = 0;
       if (stage < 0) stage = json["stageLoots"].length - 1;
       _currentStage = stage;
+    });
+  }
+
+  void slideSlider(double newVal) {
+    print("hello $newVal");
+    setState(() {
+      _slider = newVal;
     });
   }
 
@@ -40,20 +48,32 @@ class StageViewState extends State<StageView> {
             loot: stageItems,
             mapName: mapName,
           ),
-          bottomNavigationBar: ButtonBar(children: <Widget>[
+          persistentFooterAlignment: AlignmentDirectional.bottomCenter,
+          persistentFooterButtons: <Widget>[
+            TextButton(
+              child: const Text("PREVIOUS STAGE"),
+              onPressed: () {
+                changeStage(_currentStage - 1);
+              },
+            ),
+            const Text("Interactable Opacity"),
+            FractionallySizedBox(
+              widthFactor: 0.3,
+              child: Slider(
+                label: "Slider Opacity",
+                value: _slider,
+                secondaryTrackValue: 0.5,
+                onChanged: slideSlider,
+              ),
+            ),
+            const Text("Loot Opacity"),
             TextButton(
               child: const Text("NEXT STAGE"),
               onPressed: () {
                 changeStage(_currentStage + 1);
               },
             ),
-            TextButton(
-              child: const Text("PREV STAGE"),
-              onPressed: () {
-                changeStage(_currentStage - 1);
-              },
-            ),
-          ]),
+          ],
         ),
       ),
     );
