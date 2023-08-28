@@ -47,9 +47,9 @@ class PositionMultiItemsDelegate extends MultiChildLayoutDelegate {
       case 3:
         // triangle with single top
         return [
-          [-pos[0] / 2, -pos[1] / 2], // bottom left
-          [pos[0] / 2, -pos[1] / 2], // bottom right
-          [0, pos[1] / 2], // top
+          [0, -pos[1] / 2], // top
+          [-pos[0] / 2, pos[1] / 2], // bottom right
+          [pos[0] / 2, pos[1] / 2], // bottom left
         ];
       case 4:
         // four corners square
