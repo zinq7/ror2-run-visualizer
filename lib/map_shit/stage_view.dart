@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:test_app/map_shit/loot_overlayer.dart';
-import 'package:test_app/run_visualizer/stage_helper.dart';
 
 /// Visualizes a run, with items from each stage on a timeline
 class StageView extends StatefulWidget {
@@ -14,7 +13,7 @@ class StageView extends StatefulWidget {
 
 class StageViewState extends State<StageView> {
   int _currentStage = 0;
-  double _slider = 0;
+  double _slider = 0.0;
   late Map json;
 
   void changeStage(int stage) {
@@ -26,7 +25,6 @@ class StageViewState extends State<StageView> {
   }
 
   void slideSlider(double newVal) {
-    print("hello $newVal");
     setState(() {
       _slider = newVal;
     });
@@ -47,6 +45,7 @@ class StageViewState extends State<StageView> {
           body: LootOverlayer(
             loot: stageItems,
             mapName: mapName,
+            opacity: _slider,
           ),
           persistentFooterAlignment: AlignmentDirectional.bottomCenter,
           persistentFooterButtons: <Widget>[
