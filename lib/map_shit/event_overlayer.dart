@@ -1,15 +1,15 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'map_to_image_helper.dart';
 import '../util.dart';
 
 class EventOverlayer extends StatelessWidget {
   final List<dynamic> stageEvents;
-  final double startTime;
+  final double startTime, currentTime;
   final String stageName;
-  const EventOverlayer({super.key, required this.stageEvents, required this.stageName, this.startTime = 0});
+  const EventOverlayer({super.key, required this.stageEvents, required this.stageName, this.startTime = 0, this.currentTime = 0});
 
+  // create the list of images to overlay (in the form of widgets)
   void makeImageList(List<Widget> w, List<dynamic> events) {
     for (Map item in events) {
       List<double?> size = (item["eventType"] == "CharacterExistEvent") ? [32, 32] : [64, 64];
@@ -71,7 +71,6 @@ class EventOverlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // get list
-
     List<Widget> extraItems = [];
 
     // don't show items with multiple players /

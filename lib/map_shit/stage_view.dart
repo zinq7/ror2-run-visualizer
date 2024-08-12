@@ -22,6 +22,7 @@ class StageViewState extends State<StageView> {
 
   late Map mainJson;
   late List<String> players;
+  late double minStart, maxEnd;
 
   void changeStage(int stage) {
     setState(() {
@@ -84,7 +85,8 @@ class StageViewState extends State<StageView> {
           const Text("Loot Opacity"),
         ];
       case ViewMode.events:
-        double minStart = 999999999, maxEnd = -1;
+        minStart = 999999999;
+        maxEnd = -1;
         for (var play in events) {
           minStart = min(play[0]["timestamp"], minStart);
           maxEnd = max(play[play.length - 1]["timestamp"], maxEnd);
@@ -97,16 +99,19 @@ class StageViewState extends State<StageView> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
-              color: Colors.white70,
             ),
             child: DropdownButton<String>(
               value: _followPlayer,
+              dropdownColor: Colors.black,
               padding: const EdgeInsets.symmetric(horizontal: 4.0),
               borderRadius: BorderRadius.circular(24),
               items: players.map((per) {
                 return DropdownMenuItem(
                   value: per,
-                  child: Text(per),
+                  child: Text(
+                    per,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 );
               }).toList(),
               onChanged: changeDropdown,
@@ -152,8 +157,12 @@ class StageViewState extends State<StageView> {
           }
         }
 
-        // fix stage events
-        initial = initial.sublist(stIndex, stEndIndex);
+        // fix stage events (including the last stage)
+        if (stage - 1 != _currentStage) {
+          initial = initial.sublist(stEndIndex);
+        } else {
+          initial = initial.sublist(stIndex, stEndIndex);
+        }
 
         stageEvents.add(initial);
       }
@@ -161,42 +170,69 @@ class StageViewState extends State<StageView> {
 
     return MaterialApp(
       title: 'Run Visualizer',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
-        useMaterial3: true,
+      theme: Theme.of(context).copyWith(
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 255, 255, 255)),
+        dropdownMenuTheme: const DropdownMenuThemeData(
+          textStyle: TextStyle(
+            color: Colors.white,
+            backgroundColor: Colors.black,
+          ),
+        ),
+        buttonTheme: const ButtonThemeData(
+          alignedDropdown: true,
+        ),
         textTheme: const TextTheme(
           bodyMedium: TextStyle(
-            color: Color.fromARGB(255, 185, 185, 185),
+            color: Color.fromARGB(255, 116, 188, 255),
             fontFamily: "Comic Sans",
             fontStyle: FontStyle.italic,
           ),
         ),
-        scaffoldBackgroundColor: const Color.fromARGB(255, 51, 51, 51), //const Color.fromARGB(75, 125, 127, 128),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+          ),
+        ),
+
+        primaryTextTheme: const TextTheme(
+          bodyMedium: TextStyle(
+            color: Color.fromARGB(255, 116, 188, 255),
+            fontFamily: "Comic Sans",
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        scaffoldBackgroundColor: Color.fromARGB(255, 0, 0, 0), //const Color.fromARGB(75, 125, 127, 128),
       ),
       home: Directionality(
         textDirection: TextDirection.ltr,
         child: Scaffold(
-          body: (() {
-            switch (_mode) {
-              case ViewMode.loot:
-                return LootOverlayer(
-                  loot: stageItems,
-                  mapName: mapName,
-                  opacity: _slider,
-                );
-              case ViewMode.events:
-                return EventOverlayer(
-                  stageEvents: stageEvents,
-                  startTime: stageEvents[0][0]["timestamp"],
-                  stageName: mapName,
-                );
-            }
-          }()),
+          body: InteractiveViewer(
+            maxScale: 10,
+            child: (() {
+              switch (_mode) {
+                case ViewMode.loot:
+                  return LootOverlayer(
+                    loot: stageItems,
+                    mapName: mapName,
+                    opacity: _slider,
+                  );
+                case ViewMode.events:
+                  return EventOverlayer(
+                    stageEvents: stageEvents,
+                    startTime: stageEvents[0][0]["timestamp"],
+                    stageName: mapName,
+                    currentTime: 0,
+                  );
+              }
+            }()),
+          ),
           floatingActionButton: TextButton(
-              onPressed: () {
-                clickViewMode();
-              },
-              child: Text("Mode: ${getModeName()}")),
+            onPressed: () {
+              clickViewMode();
+            },
+            child: Text("Mode: ${getModeName()}"),
+          ),
           persistentFooterAlignment: AlignmentDirectional.bottomCenter,
           persistentFooterButtons: <Widget>[
             TextButton(

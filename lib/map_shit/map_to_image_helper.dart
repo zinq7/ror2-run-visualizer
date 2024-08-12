@@ -104,8 +104,25 @@ Map stageMap = multiMap({
   ["skymeadow", "MAP_SKYMEADOW_TITLE"]: {
     "image": "lib/assets/maps/bridgemeadow.png",
     "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, 588, 328, -588, -328, rotation: 90),
+  },
+  ["lakes", "MAP_LAKES_TITLE"]: {
+    "image": "lib/assets/maps/lakes.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, -367, 190, 350, -198),
+  },
+  ["moon2", "MAP_MOON2_TITLE"]: {
+    "image": "lib/assets/maps/moon2.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, -1050, 1100, 1830, -500),
   }
 });
+
+
+// moon2
+// topleft: -1050, 1100
+// bottomright: 1830, -500
+
+// lakes
+// topleft: -367, 170
+// bottomright: 350, -178 
 
 // dampcavesimple
 // tr: -775, 233

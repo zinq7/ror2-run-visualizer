@@ -13,7 +13,6 @@ String? getInteractablePortrait(Map interactable) {
   if (interact == "") interact = "blank";
 
   return "$iconPath$interact.png";
-  // return null;
 }
 
 List<String> getItemPortraitFromInteractable(Map interactable) {
