@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:test_app/map_shit/event_overlayer.dart';
 import 'package:test_app/map_shit/loot_overlayer.dart';
+import 'package:test_app/util.dart';
 
 /// Visualizes a run, with items from each stage on a timeline
 class StageView extends StatefulWidget {
-  final String json;
-  const StageView({super.key, required this.json});
+  final List<String> jsons;
+  const StageView({super.key, required this.jsons});
 
   @override
   State createState() => StageViewState();
@@ -14,12 +17,16 @@ class StageView extends StatefulWidget {
 class StageViewState extends State<StageView> {
   int _currentStage = 0;
   double _slider = 0.0;
-  late Map json;
+  ViewMode _mode = ViewMode.events;
+  String _followPlayer = "All";
+
+  late Map mainJson;
+  late List<String> players;
 
   void changeStage(int stage) {
     setState(() {
-      if (stage >= json["stageLoots"].length) stage = 0;
-      if (stage < 0) stage = json["stageLoots"].length - 1;
+      if (stage >= mainJson["stageLoots"].length) stage = 0;
+      if (stage < 0) stage = mainJson["stageLoots"].length - 1;
       _currentStage = stage;
     });
   }
@@ -30,23 +37,166 @@ class StageViewState extends State<StageView> {
     });
   }
 
+  void clickViewMode() {
+    setState(() {
+      const viewCycle = [ViewMode.events, ViewMode.loot]; //... more
+      int current = viewCycle.indexOf(_mode);
+      current++;
+      if (current >= viewCycle.length) current = 0;
+
+      _mode = viewCycle[current];
+    });
+  }
+
+  void changeDropdown(String? person) {
+    setState(() {
+      _followPlayer = person ?? "All";
+    });
+  }
+
+  String getModeName() {
+    switch (_mode) {
+      case ViewMode.events:
+        return "Event Overlay";
+      case ViewMode.loot:
+        return "Loot Overlay";
+      default:
+        return "???";
+    }
+  }
+
+  List<Widget> getBottomBar(List<dynamic> events) {
+    var slider = FractionallySizedBox(
+      widthFactor: 0.3,
+      child: Slider(
+        label: "Slider Opacity",
+        value: _slider,
+        secondaryTrackValue: 0.5,
+        onChanged: slideSlider,
+      ),
+    );
+
+    switch (_mode) {
+      case ViewMode.loot:
+        return [
+          const Text("Interactable Opacity"),
+          slider,
+          const Text("Loot Opacity"),
+        ];
+      case ViewMode.events:
+        double minStart = 999999999, maxEnd = -1;
+        for (var play in events) {
+          minStart = min(play[0]["timestamp"], minStart);
+          maxEnd = max(play[play.length - 1]["timestamp"], maxEnd);
+        }
+
+        return [
+          Text(timeFormat(minStart)),
+          slider,
+          Text(timeFormat(maxEnd)),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              color: Colors.white70,
+            ),
+            child: DropdownButton<String>(
+              value: _followPlayer,
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              borderRadius: BorderRadius.circular(24),
+              items: players.map((per) {
+                return DropdownMenuItem(
+                  value: per,
+                  child: Text(per),
+                );
+              }).toList(),
+              onChanged: changeDropdown,
+            ),
+          ),
+        ];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    json = jsonDecode(widget.json);
+    mainJson = jsonDecode(widget.jsons[0]);
 
     // var stageEvents = getStageEvents(jsonDecode(json))[0];
-    var stageItems = json["stageLoots"][_currentStage]["stageLoot"];
-    var mapName = json["stageLoots"][_currentStage]["stageName"];
+    var stageItems = mainJson["stageLoots"][_currentStage]["stageLoot"];
+    var mapName = mainJson["stageLoots"][_currentStage]["stageName"];
 
-    return Material(
-      child: Directionality(
+    // add all the people's jsons (while separating by stage)
+    var stageEvents = [];
+    players = ["All"];
+    for (int i = 0; i < widget.jsons.length; i++) {
+      var indivJson = jsonDecode(widget.jsons[i]);
+
+      // load players
+      String player = indivJson["player"];
+      players.add(player);
+
+      if (_followPlayer == "All" || player == _followPlayer) {
+        List<dynamic> initial = indivJson["runEvents"];
+
+        // search for correct stage info
+        int stage = 0, stIndex = 0, stEndIndex = 0;
+        for (int i = 0; i < initial.length; i++) {
+          Map ev = initial[i];
+          if (ev["eventType"] == "StageStartEvent") {
+            stage++;
+            stIndex = stEndIndex;
+            stEndIndex = i;
+
+            if (stage - 1 == _currentStage) {
+              break;
+            }
+          }
+        }
+
+        // fix stage events
+        initial = initial.sublist(stIndex, stEndIndex);
+
+        stageEvents.add(initial);
+      }
+    }
+
+    return MaterialApp(
+      title: 'Run Visualizer',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+        useMaterial3: true,
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(
+            color: Color.fromARGB(255, 185, 185, 185),
+            fontFamily: "Comic Sans",
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 51, 51, 51), //const Color.fromARGB(75, 125, 127, 128),
+      ),
+      home: Directionality(
         textDirection: TextDirection.ltr,
         child: Scaffold(
-          body: LootOverlayer(
-            loot: stageItems,
-            mapName: mapName,
-            opacity: _slider,
-          ),
+          body: (() {
+            switch (_mode) {
+              case ViewMode.loot:
+                return LootOverlayer(
+                  loot: stageItems,
+                  mapName: mapName,
+                  opacity: _slider,
+                );
+              case ViewMode.events:
+                return EventOverlayer(
+                  stageEvents: stageEvents,
+                  startTime: stageEvents[0][0]["timestamp"],
+                  stageName: mapName,
+                );
+            }
+          }()),
+          floatingActionButton: TextButton(
+              onPressed: () {
+                clickViewMode();
+              },
+              child: Text("Mode: ${getModeName()}")),
           persistentFooterAlignment: AlignmentDirectional.bottomCenter,
           persistentFooterButtons: <Widget>[
             TextButton(
@@ -55,17 +205,7 @@ class StageViewState extends State<StageView> {
                 changeStage(_currentStage - 1);
               },
             ),
-            const Text("Interactable Opacity"),
-            FractionallySizedBox(
-              widthFactor: 0.3,
-              child: Slider(
-                label: "Slider Opacity",
-                value: _slider,
-                secondaryTrackValue: 0.5,
-                onChanged: slideSlider,
-              ),
-            ),
-            const Text("Loot Opacity"),
+            ...getBottomBar(stageEvents),
             TextButton(
               child: const Text("NEXT STAGE"),
               onPressed: () {
@@ -78,3 +218,5 @@ class StageViewState extends State<StageView> {
     );
   }
 }
+
+enum ViewMode { events, loot }

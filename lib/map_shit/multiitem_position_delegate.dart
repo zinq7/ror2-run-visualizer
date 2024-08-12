@@ -31,7 +31,6 @@ class PositionMultiItemsDelegate extends MultiChildLayoutDelegate {
   }
 
   List<List<double>> positionMultiItems(int count, List<double> pos) {
-    print('there is a count $count');
     switch (count) {
       case 1:
         // single centered
@@ -59,7 +58,26 @@ class PositionMultiItemsDelegate extends MultiChildLayoutDelegate {
           [pos[0] / 2, -pos[1] / 2], // bottom right
           [pos[0] / 2, pos[1] / 2], // top right
         ];
+      case 5:
+        return [
+          [0, -pos[1]], // top
+          [-pos[1], 0], // right
+          [0, pos[1]], // bottom
+          [pos[1], 0], // left
+          [0, 0] // center
+        ];
+      case 6:
+        return [
+          [pos[0] / 2, -pos[1]], // top left
+          [-pos[0] / 2, -pos[1]], // top right
+          [-pos[0], 0], // right
+          [-pos[0] / 2, pos[1]], // bottom right
+          [pos[0] / 2, pos[1]], // bottom left
+          [pos[0], 0], // left
+        ];
+      default:
+        // default behaviour: throw them all on top of eachother for mega scam shrines
+        return List.filled(count, <double>[0, 0]);
     }
-    return <List<double>>[];
   }
 }

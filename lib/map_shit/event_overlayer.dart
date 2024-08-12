@@ -3,16 +3,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'map_to_image_helper.dart';
 import '../util.dart';
-import 'dart:ui';
 
 class EventOverlayer extends StatelessWidget {
-  final List stageEvents;
+  final List<dynamic> stageEvents;
   final double startTime;
-  const EventOverlayer({super.key, required this.stageEvents, this.startTime = 0});
+  final String stageName;
+  const EventOverlayer({super.key, required this.stageEvents, required this.stageName, this.startTime = 0});
 
   void makeImageList(List<Widget> w, List<dynamic> events) {
     for (Map item in events) {
-      List<double?> size = (item["eventType"] == "CharacterExistEvent") ? [16, 16] : [64, 64];
+      List<double?> size = (item["eventType"] == "CharacterExistEvent") ? [32, 32] : [64, 64];
       String? portraitURL = getPortraitFromEvent(item); // helper to get image
 
       if (portraitURL == null) continue; // can't find portrait
@@ -58,8 +58,7 @@ class EventOverlayer extends StatelessWidget {
                     )
                   ];
                 } else {
-                  print("hidden");
-                  return [Text("balls")];
+                  return [];
                 }
               }()),
             ],
@@ -72,27 +71,54 @@ class EventOverlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // get list
-    List<Widget> events = [];
-    makeImageList(events, stageEvents);
+
+    List<Widget> extraItems = [];
+
+    // don't show items with multiple players /
+    if (stageEvents.length == 1) {
+      List<Widget> events = [];
+      makeImageList(events, stageEvents[0]);
+
+      extraItems.add(
+        CustomMultiChildLayout(
+          delegate: RatiodItemOverlayer(
+            events: stageEvents[0],
+            ratio: stageMap[stageName]!["ratio"] as Function,
+          ),
+          children: events,
+        ),
+      );
+    } else {
+      for (int i = 1; i < stageEvents.length; i++) {
+        extraItems.add(
+          CustomPaint(
+            size: MediaQuery.of(context).size,
+            painter: LinePainter(
+              events: stageEvents[i],
+              ratio: stageMap[stageName]!["ratio"] as Function,
+              hueShift: i * 20,
+            ),
+          ),
+        );
+      }
+    }
 
     // it's a stack ig
     return Stack(
+      fit: StackFit.expand,
       children: [
-        Image.asset(stageMap["Siphoned Forest"]!["image"] as String),
-        CustomMultiChildLayout(
-          delegate: RatiodItemOverlayer(
-            events: stageEvents,
-            ratio: stageMap["Siphoned Forest"]!["ratio"] as Function,
-          ),
-          children: events,
+        Image.asset(
+          stageMap[stageName]!["image"] as String,
+          fit: BoxFit.fill,
         ),
         CustomPaint(
           size: MediaQuery.of(context).size,
           painter: LinePainter(
-            events: stageEvents,
-            ratio: stageMap["Siphoned Forest"]!["ratio"] as Function,
+            events: stageEvents[0],
+            ratio: stageMap[stageName]!["ratio"] as Function,
           ),
         ),
+        ...extraItems,
       ],
     );
   }
@@ -122,7 +148,6 @@ class RatiodItemOverlayer extends MultiChildLayoutDelegate {
         ),
       );
 
-      print("ratioing ${item["interactorName"]}");
       var percents = ratio(item["z"], item["x"], size.width, size.height);
       Offset thisPos = offset +
           Offset(percents[0], percents[1]) -
@@ -143,22 +168,25 @@ class RatiodItemOverlayer extends MultiChildLayoutDelegate {
 }
 
 class LinePainter extends CustomPainter {
+  final int hueShift;
   final List events;
   final Function ratio;
   const LinePainter({
     required this.events,
     required this.ratio,
+    this.hueShift = 0,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    print("PAINTING, NERD $size, ${canvas.runtimeType}");
     const Color preTp = Color.fromARGB(185, 29, 202, 38), postTp = Color.fromARGB(162, 219, 33, 33), midTp = Color.fromARGB(188, 61, 128, 252);
     const List<Color> lineColors = [preTp, midTp, postTp];
     int tpColor = 0;
 
     Offset? oldPos;
     for (var event in events) {
+      if (event["eventType"].contains("Charge")) tpColor++;
+
       if (getPortraitFromEvent(event) == null) continue;
       if (event["x"] == 0 && event["z"] == 0) continue;
 
@@ -170,7 +198,10 @@ class LinePainter extends CustomPainter {
         Offset newPos = Offset(percents[0], percents[1]);
 
         var pnt = Paint();
-        pnt.color = lineColors[min(tpColor, lineColors.length)];
+        var clr = lineColors[min(tpColor, lineColors.length)];
+        // add hue shift
+        clr = HSLColor.fromColor(clr).withHue(HSLColor.fromColor(clr).hue + hueShift).toColor();
+        pnt.color = clr;
         pnt.strokeWidth = 4;
         canvas.drawLine(
           oldPos,
@@ -179,8 +210,6 @@ class LinePainter extends CustomPainter {
         );
         oldPos = newPos;
       }
-
-      if (event["eventType"].contains("Charge")) tpColor++;
     }
   }
 

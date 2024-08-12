@@ -9,8 +9,10 @@ String timeFormat(double time) {
 /// gets a portrait for a [json] interactable object if application
 String? getInteractablePortrait(Map interactable) {
   const iconPath = "lib/assets/icons/";
+  String interact = interactable["interactorName"] ?? "";
+  if (interact == "") interact = "blank";
 
-  return "$iconPath${interactable["interactorName"]}.png";
+  return "$iconPath$interact.png";
   // return null;
 }
 
@@ -19,7 +21,7 @@ List<String> getItemPortraitFromInteractable(Map interactable) {
 
   var list = <String>[];
   for (Map item in interactable["loot"]) {
-    var name = item["nameToken"];
+    var name = item["nameToken"] ?? "blank";
     list.add("$itemPath$name.png");
   }
 
@@ -42,7 +44,7 @@ String? getPortraitFromEvent(Map event) {
 
     // tp start is visible, end doesn't matter
   } else if (eventType == "ChargeStartEvent") {
-    return "${misc}teleporter.png";
+    return "${basePath}icons/TELEPORTER_NAME.png";
 
     // tp end is a null boi
   } else if (eventType == "TeleportHitEvent") {
@@ -61,9 +63,9 @@ String? getPortraitFromEvent(Map event) {
     String bossName = event["boss"];
     return "$body$bossName.png";
 
-    // footprints
+    // footprints -> don't draw these
   } else if (eventType == "CharacterExistEvent") {
-    return "${misc}feet.png";
+    return "hidden";
 
     // spawn in
   } else if (eventType == "SpawnInEvent") {

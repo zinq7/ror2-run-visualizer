@@ -40,7 +40,7 @@ class FilePickState extends State<FilePick> {
               ),
               child: const Text(
                 "Run Visualizer",
-                textScaleFactor: 4,
+                textScaler: TextScaler.linear(4),
               ),
             ),
             TextButton(
@@ -52,7 +52,7 @@ class FilePickState extends State<FilePick> {
               ),
               child: const Text(
                 "Text Data",
-                textScaleFactor: 4,
+                textScaler: TextScaler.linear(4),
               ),
             ),
             TextButton(
@@ -64,7 +64,7 @@ class FilePickState extends State<FilePick> {
               ),
               child: const Text(
                 "Map Shit",
-                textScaleFactor: 4,
+                textScaler: TextScaler.linear(4),
               ),
             ),
           ],
@@ -127,12 +127,7 @@ void runVisualizer(List jsons) {
 }
 
 void stageOverlayer(List jsons) {
-  if (jsons.length > 1) {
-    throw "not implemented";
-    // runApp(RunComparer(runs: jsons as List<String>));
-  } else {
-    runApp(StageView(json: jsons[0]));
-  }
+  runApp(StageView(jsons: jsons as List<String>));
 }
 
 enum DisplayMode {
