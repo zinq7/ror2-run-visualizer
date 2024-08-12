@@ -58,6 +58,7 @@ flutter:
     - lib/assets/bodies/
     - lib/assets/items/
     - lib/assets/misc/
+    - lib/assets/maps/
     - lib/assets/stages/
     - lib/assets/icons/
     - lib/map_shit/

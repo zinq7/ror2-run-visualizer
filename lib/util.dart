@@ -1,17 +1,34 @@
-import 'dart:async';
+// ignore_for_file: unused_local_variable
 
-/// Takes a time and returns the min:sec string representation
+/// Takes a [time] and returns the min:sec string representation
 String timeFormat(double time) {
   time = time / 1000; // milliseconds
   return "${(time / 60).floor()}:${time % 60 < 10 ? "0" : ""}${(time % 60).floor()}";
 }
 
+/// gets a portrait for a [json] interactable object if application
 String? getInteractablePortrait(Map interactable) {
   const iconPath = "lib/assets/icons/";
-  return "$iconPath${interactable["interactorName"]}.png";
+  String interact = interactable["interactorName"] ?? "";
+  if (interact == "") interact = "blank";
+
+  return "$iconPath$interact.png";
   // return null;
 }
 
+List<String> getItemPortraitFromInteractable(Map interactable) {
+  const itemPath = "lib/assets/items/";
+
+  var list = <String>[];
+  for (Map item in interactable["loot"]) {
+    var name = item["nameToken"] ?? "blank";
+    list.add("$itemPath$name.png");
+  }
+
+  return list;
+}
+
+/// gets a portrait for a [json] event, including portraits for **items, bodies, stages, and misc/assets**
 String? getPortraitFromEvent(Map event) {
   const basePath = "lib/assets/";
   const inv = "${basePath}items/";
@@ -27,7 +44,7 @@ String? getPortraitFromEvent(Map event) {
 
     // tp start is visible, end doesn't matter
   } else if (eventType == "ChargeStartEvent") {
-    return "${misc}teleporter.png";
+    return "${basePath}icons/TELEPORTER_NAME.png";
 
     // tp end is a null boi
   } else if (eventType == "TeleportHitEvent") {
@@ -46,9 +63,9 @@ String? getPortraitFromEvent(Map event) {
     String bossName = event["boss"];
     return "$body$bossName.png";
 
-    // footprints
+    // footprints -> don't draw these
   } else if (eventType == "CharacterExistEvent") {
-    return "${misc}feet.png";
+    return "hidden";
 
     // spawn in
   } else if (eventType == "SpawnInEvent") {

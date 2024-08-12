@@ -6,9 +6,22 @@ import 'run_visualizer/run_visualizer.dart';
 import 'dart:convert';
 
 /// Visualizes a run, with items from each stage on a timeline
-class FilePick extends StatelessWidget {
-  DisplayMode displayMode;
-  FilePick({super.key, this.displayMode = DisplayMode.runVisualizer});
+class FilePick extends StatefulWidget {
+  final DisplayMode defaultDisplayMode;
+  const FilePick({super.key, this.defaultDisplayMode = DisplayMode.runVisualizer});
+
+  @override
+  State<StatefulWidget> createState() => FilePickState();
+}
+
+class FilePickState extends State<FilePick> {
+  late DisplayMode displayMode;
+
+  @override
+  void initState() {
+    displayMode = widget.defaultDisplayMode;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +40,7 @@ class FilePick extends StatelessWidget {
               ),
               child: const Text(
                 "Run Visualizer",
-                textScaleFactor: 4,
+                textScaler: TextScaler.linear(4),
               ),
             ),
             TextButton(
@@ -39,7 +52,7 @@ class FilePick extends StatelessWidget {
               ),
               child: const Text(
                 "Text Data",
-                textScaleFactor: 4,
+                textScaler: TextScaler.linear(4),
               ),
             ),
             TextButton(
@@ -51,7 +64,7 @@ class FilePick extends StatelessWidget {
               ),
               child: const Text(
                 "Map Shit",
-                textScaleFactor: 4,
+                textScaler: TextScaler.linear(4),
               ),
             ),
           ],
@@ -114,12 +127,7 @@ void runVisualizer(List jsons) {
 }
 
 void stageOverlayer(List jsons) {
-  if (jsons.length > 1) {
-    throw "not implemented";
-    // runApp(RunComparer(runs: jsons as List<String>));
-  } else {
-    runApp(StageView(json: jsons[0]));
-  }
+  runApp(StageView(jsons: jsons as List<String>));
 }
 
 enum DisplayMode {

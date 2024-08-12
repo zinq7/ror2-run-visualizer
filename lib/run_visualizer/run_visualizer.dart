@@ -13,8 +13,8 @@ class RunVisualizer extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    List<Stage> stages = List<Stage>.empty(growable: true); // yes
-
+    List<Stage> stages = List<Stage>.empty(growable: true) // yes
+;
     // get stage events
     List stageJSONs = getStageEvents(jsonDecode(json));
     double totalTime = 0;
