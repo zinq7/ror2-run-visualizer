@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'map_to_image_helper.dart';
-import '../util.dart';
+import 'package:test_app/map_shit/map_to_image_helper.dart';
+import 'package:test_app/util.dart';
 
 class EventOverlayer extends StatelessWidget {
   final List<dynamic> stageEvents;
