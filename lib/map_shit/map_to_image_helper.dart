@@ -19,8 +19,11 @@ List ratioWithCorners(
   } else if (rotation == 180) {
     itemY = bottom - (itemY - top);
     itemX = right - (itemX - left);
+  } else if (rotation == -90) {
+    var tmp = -itemY;
+    itemY = -itemX;
+    itemX = tmp;
   }
-
   // do math
   double xCoeff = ((itemX - left) / (right - left));
   double yCoeff = ((itemY - top) / (bottom - top));
@@ -79,7 +82,7 @@ Map stageMap = multiMap({
   },
   ["sulfurpools", "MAP_SULFURPOOLS_TITLE"]: {
     "image": "lib/assets/maps/sulfurpools.png",
-    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, 462, 260, -462, -260),
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, -462, 260, 462, -260,),
   },
   ["wispgraveyard", "MAP_WISPGRAVEYARD_TITLE"]: {
     "image": "lib/assets/maps/wispgraveyard.png",
