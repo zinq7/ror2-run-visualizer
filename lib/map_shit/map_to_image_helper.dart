@@ -19,10 +19,6 @@ List ratioWithCorners(
   } else if (rotation == 180) {
     itemY = bottom - (itemY - top);
     itemX = right - (itemX - left);
-  } else if (rotation == -90) {
-    var tmp = -itemY;
-    itemY = -itemX;
-    itemX = tmp;
   }
   // do math
   double xCoeff = ((itemX - left) / (right - left));
