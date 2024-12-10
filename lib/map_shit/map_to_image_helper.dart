@@ -111,9 +111,39 @@ Map stageMap = multiMap({
   ["moon2", "MAP_MOON2_TITLE"]: {
     "image": "lib/assets/maps/moon2.png",
     "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, -1050, 1100, 1830, -500),
-  }
+  },
+  ["village", "MAP_VILLAGE_TITLE"]: {
+    "image": "lib/assets/maps/village.png",
+    "ratio": (a, b, c, d) => ratioWithCorners(a, b, c, d, -495 - 177, 277 + 100, 495 + 177, -277 - 100), // 177x100 adjustmenet
+  },
+  ["habitat", "MAP_HABITAT_TITLE"]: {
+    "image": "lib/assets/maps/habitat.png",
+    "ratio": (a,b,c,d) => ratioWithCorners(a, b, c, d, -305 - 177/3, 173 + 100/3, 305 + 177/3, -173 - 100/3), // 177x100 third adjustment
+  },
+  ["lemuriantemple", "MAP_LEMURIANTEMPLE_NAME"]: {
+    "image": "lib/assets/maps/lemuriantemple.png",
+    "ratio": (a,b,c,d) => ratioWithCorners(a, b, c, d, -342 - 177/2, 142 + 100/2, 342 + 177/2, -241 - 100/2), // 177x100 half adjustment
+  },
+  ["helminthroost", "MAP_HELMINTHROOST_NAME"]: {
+    "image": "lib/assets/maps/helminthroost.png",
+    "ratio": (a,b,c,d) => ratioWithCorners(a, b, c, d, -1047 - 177/1.4, 457 + 100/1.4, 43 + 177/1.4, -157 - 100/1.4), // 177x100 1.4 adjustment
+  },
 });
 
+
+// DOCUMENTING HOW TO DO THIS
+// basically with sinai-dev's unity explorer, go free cam, change it's it to about 0 2000 0, increase farclipplane, lower FOV
+// make rotation 0 90 0 (or something that looks at the stage). Afterwards, turn off all non-stage required objects, take a photo.
+// To get ratio, place a bunch of flying newt alters in the stage with 4x scale at known positions, calc the PIXELS to WORLDSPACE ratio,
+// and then use that multiplied by pixels to edge to get worldspace at the end of the images.
+
+// adjustments were added after based on newt alter locations, however you can minimizing it by placing reference points on the same y level as the stage, 
+// or lowering FOV and raising camera height until the stage is hella flat
+
+// village
+// 400 ws => 1560 px
+// topleft -500 , 277
+// bright 500, -277
 
 // moon2
 // topleft: -1050, 1100
@@ -151,8 +181,6 @@ Map stageMap = multiMap({
 // frozenwall:
 // tr: -540, 304
 // bl: 540, -304
-
-
 
 // ancientloft: (90 rot)
 // topleft: 432, 292

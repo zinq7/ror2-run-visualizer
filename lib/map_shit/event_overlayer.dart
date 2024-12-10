@@ -83,17 +83,18 @@ class EventOverlayer extends StatelessWidget {
     // get list
     List<Widget> extraItems = [];
 
-     List<List<Map>> realStageEvents = [];
-      for (var player in stageEvents) {
-        List<Map> realPlayerEvents = [];
-        for (var playerEvent in player) {
-          if (playerEvent["timestamp"] as double <= currentTime &&
-              playerEvent["timestamp"] as double > currentTime - 10000) {
-            realPlayerEvents.add(playerEvent); 
-          }
+    List<List<Map>> realStageEvents = [];
+    for (var player in stageEvents) {
+      List<Map> realPlayerEvents = [];
+      for (var playerEvent in player) {
+        if (currentTime == startTime ||
+            (playerEvent["timestamp"] as double <= currentTime &&
+                playerEvent["timestamp"] as double > currentTime - 10000)) {
+          realPlayerEvents.add(playerEvent);
         }
-        realStageEvents.add(realPlayerEvents);
       }
+      realStageEvents.add(realPlayerEvents);
+    }
 
     // don't show items with multiple players /
     if (realStageEvents.length == 1) {
