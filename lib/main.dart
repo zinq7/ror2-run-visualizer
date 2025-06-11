@@ -1,4 +1,3 @@
-import 'file_pick.dart';
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 import 'dart:html';
