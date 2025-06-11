@@ -168,11 +168,14 @@ class StageViewState extends State<StageView> {
       }
     }
 
+    double startTimeCalc = stageEvents[0][0]["timestamp"];
+    double endTimeCalc = stageEvents[0][stageEvents[0].length - 1]["timestamp"];
+
     return MaterialApp(
       title: 'Run Visualizer',
       theme: Theme.of(context).copyWith(
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 255, 255, 255)),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 255, 255, 255)),
         dropdownMenuTheme: const DropdownMenuThemeData(
           textStyle: TextStyle(
             color: Colors.white,
@@ -203,7 +206,7 @@ class StageViewState extends State<StageView> {
             fontStyle: FontStyle.italic,
           ),
         ),
-        scaffoldBackgroundColor: Color.fromARGB(
+        scaffoldBackgroundColor: const Color.fromARGB(
             255, 0, 0, 0), //const Color.fromARGB(75, 125, 127, 128),
       ),
       home: Directionality(
@@ -222,9 +225,10 @@ class StageViewState extends State<StageView> {
                 case ViewMode.events:
                   return EventOverlayer(
                     stageEvents: stageEvents,
-                    startTime: stageEvents[0][0]["timestamp"],
+                    startTime: startTimeCalc,
                     stageName: mapName,
-                    currentTime: 0,
+                    currentTime: (endTimeCalc - startTimeCalc) * _slider +
+                        stageEvents[0][0]["timestamp"],
                   );
               }
             }()),

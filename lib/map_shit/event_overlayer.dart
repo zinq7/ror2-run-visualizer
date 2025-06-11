@@ -7,16 +7,24 @@ class EventOverlayer extends StatelessWidget {
   final List<dynamic> stageEvents;
   final double startTime, currentTime;
   final String stageName;
-  const EventOverlayer({super.key, required this.stageEvents, required this.stageName, this.startTime = 0, this.currentTime = 0});
+  const EventOverlayer(
+      {super.key,
+      required this.stageEvents,
+      required this.stageName,
+      this.startTime = 0,
+      this.currentTime = 0});
 
   // create the list of images to overlay (in the form of widgets)
-  void makeImageList(List<Widget> w, List<dynamic> events) {
+  void makeImageList(List<Widget> w, List<Map> events) {
     for (Map item in events) {
-      List<double?> size = (item["eventType"] == "CharacterExistEvent") ? [32, 32] : [64, 64];
+      List<double?> size =
+          (item["eventType"] == "CharacterExistEvent") ? [32, 32] : [64, 64];
       String? portraitURL = getPortraitFromEvent(item); // helper to get image
 
       if (portraitURL == null) continue; // can't find portrait
-      if (item["x"] == 0 && item["z"] == 0) continue; // world event, we ignore in THIS one
+      if (item["x"] == 0 && item["z"] == 0) {
+        continue; // world event, we ignore in THIS one
+      }
 
       // add the widget
       w.add(
@@ -26,13 +34,15 @@ class EventOverlayer extends StatelessWidget {
             alignment: Alignment.topCenter,
             children: [
               ...(() {
-                if (item["eventType"] != "CharacterExistEvent" && portraitURL != "hidden") {
+                if (item["eventType"] != "CharacterExistEvent" &&
+                    portraitURL != "hidden") {
                   return [
                     Container(
                       height: size[0],
                       width: size[1],
                       decoration: BoxDecoration(
-                        color: const Color.fromARGB(136, 0, 0, 0), //Color.fromARGB(192, 119, 119, 119),
+                        color: const Color.fromARGB(
+                            136, 0, 0, 0), //Color.fromARGB(192, 119, 119, 119),
                         border: Border.all(
                           width: 0.05,
                           color: Colors.white,
@@ -73,27 +83,41 @@ class EventOverlayer extends StatelessWidget {
     // get list
     List<Widget> extraItems = [];
 
+    List<List<Map>> realStageEvents = [];
+    for (var player in stageEvents) {
+      List<Map> realPlayerEvents = [];
+      for (var playerEvent in player) {
+        if (currentTime == startTime ||
+            (playerEvent["timestamp"] as double <= currentTime &&
+                playerEvent["timestamp"] as double > currentTime - 10000)) {
+          realPlayerEvents.add(playerEvent);
+        }
+      }
+      realStageEvents.add(realPlayerEvents);
+    }
+
     // don't show items with multiple players /
-    if (stageEvents.length == 1) {
+    if (realStageEvents.length == 1) {
       List<Widget> events = [];
-      makeImageList(events, stageEvents[0]);
+
+      makeImageList(events, realStageEvents[0]);
 
       extraItems.add(
         CustomMultiChildLayout(
           delegate: RatiodItemOverlayer(
-            events: stageEvents[0],
+            events: realStageEvents[0],
             ratio: stageMap[stageName]!["ratio"] as Function,
           ),
           children: events,
         ),
       );
     } else {
-      for (int i = 1; i < stageEvents.length; i++) {
+      for (int i = 1; i < realStageEvents.length; i++) {
         extraItems.add(
           CustomPaint(
             size: MediaQuery.of(context).size,
             painter: LinePainter(
-              events: stageEvents[i],
+              events: realStageEvents[i],
               ratio: stageMap[stageName]!["ratio"] as Function,
               hueShift: i * 20,
             ),
@@ -113,7 +137,7 @@ class EventOverlayer extends StatelessWidget {
         CustomPaint(
           size: MediaQuery.of(context).size,
           painter: LinePainter(
-            events: stageEvents[0],
+            events: realStageEvents[0],
             ratio: stageMap[stageName]!["ratio"] as Function,
           ),
         ),
@@ -128,12 +152,17 @@ class RatiodItemOverlayer extends MultiChildLayoutDelegate {
   Function ratio;
   Offset offset;
   bool isEvent;
-  RatiodItemOverlayer({required this.events, required this.ratio, this.offset = Offset.zero, this.isEvent = true});
+  RatiodItemOverlayer(
+      {required this.events,
+      required this.ratio,
+      this.offset = Offset.zero,
+      this.isEvent = true});
 
   @override
   void performLayout(Size size) {
     for (Map item in events) {
-      if ((isEvent && getPortraitFromEvent(item) == null) || getInteractablePortrait(item) == null) continue;
+      if ((isEvent && getPortraitFromEvent(item) == null) ||
+          getInteractablePortrait(item) == null) continue;
       if (item["x"] == 0 && item["z"] == 0) continue;
 
       // set constraints
@@ -150,7 +179,9 @@ class RatiodItemOverlayer extends MultiChildLayoutDelegate {
       var percents = ratio(item["z"], item["x"], size.width, size.height);
       Offset thisPos = offset +
           Offset(percents[0], percents[1]) -
-          (item["eventType"] == "CharacterExistEvent" ? const Offset(16, 16) : const Offset(32, 32)); // inherent 64 offset, top left corner
+          (item["eventType"] == "CharacterExistEvent"
+              ? const Offset(16, 16)
+              : const Offset(32, 32)); // inherent 64 offset, top left corner
 
       // position it
       positionChild(
@@ -178,7 +209,9 @@ class LinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const Color preTp = Color.fromARGB(185, 29, 202, 38), postTp = Color.fromARGB(162, 219, 33, 33), midTp = Color.fromARGB(188, 61, 128, 252);
+    const Color preTp = Color.fromARGB(185, 29, 202, 38),
+        postTp = Color.fromARGB(162, 219, 33, 33),
+        midTp = Color.fromARGB(188, 61, 128, 252);
     const List<Color> lineColors = [preTp, midTp, postTp];
     int tpColor = 0;
 
@@ -199,7 +232,9 @@ class LinePainter extends CustomPainter {
         var pnt = Paint();
         var clr = lineColors[min(tpColor, lineColors.length)];
         // add hue shift
-        clr = HSLColor.fromColor(clr).withHue(HSLColor.fromColor(clr).hue + hueShift).toColor();
+        clr = HSLColor.fromColor(clr)
+            .withHue(HSLColor.fromColor(clr).hue + hueShift)
+            .toColor();
         pnt.color = clr;
         pnt.strokeWidth = 4;
         canvas.drawLine(

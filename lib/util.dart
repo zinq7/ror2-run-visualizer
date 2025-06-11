@@ -35,6 +35,8 @@ String? getPortraitFromEvent(Map event) {
   const stage = "${basePath}stages/";
   const misc = "${basePath}misc/";
 
+  if (event.isEmpty) return null;
+
   String eventType = event["eventType"];
 
   // items
