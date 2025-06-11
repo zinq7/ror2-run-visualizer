@@ -171,7 +171,8 @@ class StageViewState extends State<StageView> {
     return MaterialApp(
       title: 'Run Visualizer',
       theme: Theme.of(context).copyWith(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 255, 255, 255)),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 255, 255, 255)),
         dropdownMenuTheme: const DropdownMenuThemeData(
           textStyle: TextStyle(
             color: Colors.white,
@@ -202,7 +203,8 @@ class StageViewState extends State<StageView> {
             fontStyle: FontStyle.italic,
           ),
         ),
-        scaffoldBackgroundColor: Color.fromARGB(255, 0, 0, 0), //const Color.fromARGB(75, 125, 127, 128),
+        scaffoldBackgroundColor: Color.fromARGB(
+            255, 0, 0, 0), //const Color.fromARGB(75, 125, 127, 128),
       ),
       home: Directionality(
         textDirection: TextDirection.ltr,

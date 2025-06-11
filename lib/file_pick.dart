@@ -8,7 +8,8 @@ import 'dart:convert';
 /// Visualizes a run, with items from each stage on a timeline
 class FilePick extends StatefulWidget {
   final DisplayMode defaultDisplayMode;
-  const FilePick({super.key, this.defaultDisplayMode = DisplayMode.runVisualizer});
+  const FilePick(
+      {super.key, this.defaultDisplayMode = DisplayMode.runVisualizer});
 
   @override
   State<StatefulWidget> createState() => FilePickState();
@@ -74,7 +75,11 @@ class FilePickState extends State<FilePick> {
             textDirection: TextDirection.ltr,
             child: InkWell(
               onTap: () {
-                var res = FilePicker.platform.pickFiles(withData: true, type: FileType.custom, allowedExtensions: ["run.json"], allowMultiple: true);
+                var res = FilePicker.platform.pickFiles(
+                    withData: true,
+                    type: FileType.custom,
+                    allowedExtensions: ["run.json"],
+                    allowMultiple: true);
                 res.then((response) {
                   var lst = response?.files[0].bytes;
 
@@ -83,7 +88,8 @@ class FilePickState extends State<FilePick> {
 
                     for (var file in response!.files) {
                       var filyBytes = file.bytes;
-                      String json = const Utf8Decoder().convert(filyBytes!.toList());
+                      String json =
+                          const Utf8Decoder().convert(filyBytes!.toList());
                       jsons.add(json);
                     }
 
